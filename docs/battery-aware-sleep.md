@@ -28,6 +28,7 @@ The story did not begin with a new sleep button. It began with a conflict betwee
 
 ## Related documentation
 
+- [MacBaram Guide: Battery-aware sleep prevention](https://www.macbaram.com/guides/battery-aware-sleep-prevention/)
 - [Features and behavior](features.md)
 - [Safety and permissions](safety-and-permissions.md)
 - [Apple: Set sleep and wake settings for your Mac](https://support.apple.com/en-gb/guide/mac-help/mchle41a6ccd/mac)
