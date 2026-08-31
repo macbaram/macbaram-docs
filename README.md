@@ -65,6 +65,7 @@ Current plans, trial terms, and pricing are maintained only on the [official Mac
 
 - [Documentation index](docs/README.md)
 - [Features and behavior](docs/features.md)
+- [Battery-aware sleep](docs/battery-aware-sleep.md)
 - [Supported Macs](docs/supported-macs.md)
 - [Safety and permissions](docs/safety-and-permissions.md)
 - [Known limitations](KNOWN_LIMITATIONS.md)
