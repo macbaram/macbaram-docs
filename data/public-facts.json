@@ -68,6 +68,20 @@
       "source_url": "https://www.macbaram.com/"
     },
     {
+      "id": "creator-sponsorship-application",
+      "status": "available",
+      "summary": "Creator Sponsorship applications are open for creators with public activity: applicants provide a public activity URL, their Mac and Apple chip, the requested Air, Desktop, or Pro plan, and the intended use; approved applicants receive one 365-day access code without any required review, positive rating, purchase, or product feedback.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "supporters-referral-operation",
+      "status": "concept",
+      "summary": "Supporters is separate from Creator Sponsorship; referral tracking and payout are not guaranteed until the full operating flow is verified end to end.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
       "id": "power-only",
       "status": "available",
       "summary": "On supported portable Macs, Power-Only can keep operation primarily on external power after the selected charging target is reached and the current hardware and power state allow it.",

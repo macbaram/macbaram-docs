@@ -38,10 +38,11 @@ MacBaram gives supported Macs one place to manage these related conditions witho
 - **Display and Virtual Clamshell controls** — Let the physical display turn off while supported work continues, including a virtual screen session for lid-closed work on supported Apple silicon MacBooks without a real external monitor.
 - **Low-battery return to normal sleep** — At the battery level selected by the user, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep to occur.
 - **Unified dashboard** — Review fan, battery, power, and sleep state together instead of checking separate utilities.
+- **Creator Sponsorship applications** — Apply with public activity, Mac and chip, selected plan, and intended use. Approved creators receive 365 days; no review, rating, purchase, or feedback is required.
 
 Controls depend on detected hardware capabilities. Desktop Macs have no portable-battery controls, and fanless Macs have no fan controls.
 
-The current individual plan families are **Air**, **Desktop**, and **Pro**. They expose different combinations of fan, battery, and sleep/display controls according to hardware capability. Current pricing, trial terms, purchase availability, and the exact plan matrix remain on the official website. Enterprise directions and access programs that are not currently active are kept separately in [Roadmap and non-current programs](docs/roadmap.md).
+**Air**, **Desktop**, and **Pro** are current individual plan families; hardware controls vary. Commercial terms stay on the official website. Creator Sponsorship is separate from Supporters. See [Roadmap and collaboration programs](docs/roadmap.md) for Enterprise and collaboration boundaries.
 
 Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch settings by workload. Users choose the appropriate controls and presets themselves. Workload-aware assistance belongs to the **Enterprise Single roadmap**; it is not a current plan or feature.
 
@@ -67,7 +68,7 @@ Use only the canonical **[MacBaram download](https://www.macbaram.com/download)*
 - [Features and behavior](docs/features.md)
 - [Battery-aware sleep](docs/battery-aware-sleep.md)
 - [Heat Protection](docs/heat-protection.md)
-- [Roadmap and non-current programs](docs/roadmap.md)
+- [Roadmap and collaboration programs](docs/roadmap.md)
 - [Supported Macs](docs/supported-macs.md)
 - [Safety and permissions](docs/safety-and-permissions.md)
 - [Known limitations](KNOWN_LIMITATIONS.md)

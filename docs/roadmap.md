@@ -1,6 +1,6 @@
-# Roadmap and non-current programs
+# Roadmap and collaboration programs
 
-Nothing on this page makes a MacBaram feature, product plan, referral operation, payout, price, or release commitment currently available. The items below are approved public directions or carefully bounded early-program information. They require the stated implementation or operational verification before they can move to current product documentation.
+Nothing on this page makes an Enterprise product direction or a Supporters referral operation, payout, price, or release commitment currently available. Creator Sponsorship is listed separately because its public application and approved access-code path are current.
 
 ## Enterprise Single
 
@@ -16,11 +16,13 @@ The fleet architecture, data boundary, retention, price, service level, and rele
 
 ## Creator Sponsorship
 
-Creator Sponsorship is a proposed way to support growing creators with a 365-day MacBaram access opportunity. It does not require a review, public post, positive opinion, or future purchase. Feedback about inconvenience, improvements, and possible features is welcome but is not payment for the license and is not an obligation. No public application or operating launch is declared here.
+Creator Sponsorship applications are currently open for creators with public creator, blog, or community activity. Applicants provide a public activity URL, the Mac model and Apple chip they use, the requested Air, Desktop, or Pro plan, and how they plan to use it. Selection is confirmed individually after review; it is not automatic.
+
+Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. Voluntary feedback is welcome, and honest public criticism is not restricted. Creator Sponsorship is separate from the commission-based Supporters program.
 
 ## Supporters
 
-Supporters is a separate proposed referral collaboration. The CEO-approved target condition is a 20% commission on attributed purchases recommended by an approved Supporter; it is not a current payout guarantee. A complimentary access code for the Supporter's own account is separate from another customer's referral purchase.
+Supporters is a separate early referral collaboration. The approved target condition is a 20% commission on eligible attributed purchases recommended by an approved Supporter; it is not a current payout guarantee. A complimentary access benefit for the Supporter's own account is separate from another customer's referral purchase.
 
 The official website may keep an EARLY PROGRAM description and accept individual inquiries. Referral and renewal attribution, refund and dispute exclusions, settlement, and payout still require verified end-to-end operation; an inquiry path is not evidence that these mechanisms are active.
 

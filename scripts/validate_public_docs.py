@@ -70,6 +70,8 @@ EXPECTED_FACT_STATUSES = {
     "heat-protection": "available",
     "virtual-clamshell": "available",
     "individual-plan-lineup": "available",
+    "creator-sponsorship-application": "available",
+    "supporters-referral-operation": "concept",
     "power-only": "available",
     "safety-drain": "available",
     "coordinated-operating-state": "available",
@@ -86,8 +88,6 @@ EXPECTED_FACT_STATUSES = {
 ROADMAP_ONLY_TERMS = {
     "Enterprise Single",
     "Enterprise Fleet",
-    "Creator Sponsorship",
-    "Creator Access",
     "Supporters",
 }
 ROADMAP_TEXT_FILES = {
@@ -96,11 +96,23 @@ ROADMAP_TEXT_FILES = {
 ROADMAP_REFERENCE_FILES = {
     Path("README.md"),
     Path("llms.txt"),
+    Path("docs/README.md"),
+    Path("docs/faq.md"),
 }
 LIVE_SOURCE_REQUIREMENTS = {
     "apple-silicon-requirement": (
         re.compile(r"\bmacOS\s*13(?:\+|\s+or\s+(?:later|newer))\b", re.I),
         "macOS 13 or later",
+    ),
+    "creator-sponsorship-application": (
+        re.compile(
+            r"(?=.*\bCreator Sponsorship\b)(?=.*\b365-day access code\b)"
+            r"(?=.*\bpublic (?:channel|creator|blog|community))"
+            r"(?=.*\bhow (?:you|they) plan to use it\b)"
+            r"(?=.*\bNo review, positive rating, purchase, or product feedback is required\b)",
+            re.I,
+        ),
+        "the current Creator application, 365-day access, and no-obligation contract",
     ),
 }
 PROMOTION_PATTERNS = (
@@ -260,8 +272,10 @@ def validate_content(errors: list[str]) -> None:
 
 def validate_roadmap_boundaries(errors: list[str]) -> None:
     roadmap = (ROOT / "docs/roadmap.md").read_text(encoding="utf-8")
-    if "Nothing on this page makes" not in roadmap:
-        fail(errors, "docs/roadmap.md must state that roadmap copy does not activate a feature or operation")
+    if "Nothing on this page makes an Enterprise product direction or a Supporters referral operation" not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the Enterprise and Supporters non-current boundary")
+    if "Creator Sponsorship applications are currently open" not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the current Creator application state")
 
     for path in text_files():
         relative = path.relative_to(ROOT)

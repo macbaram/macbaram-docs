@@ -91,6 +91,8 @@ class StatusBoundaryTests(unittest.TestCase):
             "safety-drain": "available",
             "heat-protection": "available",
             "individual-plan-lineup": "available",
+            "creator-sponsorship-application": "available",
+            "supporters-referral-operation": "concept",
             "workload-auto-detection": "roadmap",
             "enterprise-single": "roadmap",
             "enterprise-fleet": "roadmap",
@@ -121,9 +123,17 @@ class StatusBoundaryTests(unittest.TestCase):
     def test_roadmap_copy_cannot_contradict_its_status(self) -> None:
         claims = VALIDATOR.noncurrent_promotion_claims(
             "Enterprise Single is currently available now.\n"
-            "Creator Sponsorship is currently open."
+            "Supporters is currently operational."
         )
         self.assertEqual(len(claims), 2)
+
+    def test_current_creator_application_is_not_a_roadmap_term(self) -> None:
+        self.assertEqual(
+            VALIDATOR.noncurrent_promotion_claims(
+                "Creator Sponsorship applications are currently open."
+            ),
+            [],
+        )
 
     def test_plain_availability_claim_is_rejected(self) -> None:
         self.assertEqual(
@@ -134,16 +144,15 @@ class StatusBoundaryTests(unittest.TestCase):
     def test_mixed_positive_and_negative_clauses_do_not_bypass_guard(self) -> None:
         claims = VALIDATOR.noncurrent_promotion_claims(
             "Enterprise Single is currently available, not merely a roadmap.\n"
-            "Creator Sponsorship is currently open, but payout is not operational.\n"
             "Supporters is live, but settlement is not operational.\n"
             "Enterprise Fleet is currently available without restrictions."
         )
-        self.assertEqual(len(claims), 4)
+        self.assertEqual(len(claims), 3)
 
     def test_explicit_non_current_copy_is_allowed(self) -> None:
         claims = VALIDATOR.noncurrent_promotion_claims(
             "Enterprise Single is not currently available.\n"
-            "No public operating launch is declared for Creator Sponsorship."
+            "Supporters referral tracking is not currently operational."
         )
         self.assertEqual(claims, [])
 
@@ -166,7 +175,7 @@ class StatusBoundaryTests(unittest.TestCase):
                 VALIDATOR.validate_roadmap_boundaries(errors)
             finally:
                 VALIDATOR.ROOT = original_root
-        self.assertTrue(any("non-current term outside roadmap surfaces" in error for error in errors))
+        self.assertTrue(any("non-current item promoted as current" in error for error in errors))
 
 
 class LiveSourceEvidenceTests(unittest.TestCase):
@@ -175,6 +184,14 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             "apple-silicon-requirement": {
                 "id": "apple-silicon-requirement",
                 "source_url": "https://www.macbaram.com/guides/macbaram-mac-control-guide/",
+            }
+        }
+
+    def creator_facts(self) -> dict[str, dict[str, object]]:
+        return {
+            "creator-sponsorship-application": {
+                "id": "creator-sponsorship-application",
+                "source_url": "https://www.macbaram.com/",
             }
         }
 
@@ -204,6 +221,34 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             fetch=lambda _url: '<script type="application/ld+json">{"operatingSystem":"macOS 13+"}</script><main><p>Apple silicon Mac.</p></main>',
         )
         self.assertTrue(any("source body must state macOS 13 or later" in error for error in errors))
+
+    def test_visible_creator_application_contract_passes(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.creator_facts(),
+            fetch=lambda _url: (
+                "<main><h2>Creator Sponsorship</h2>"
+                "<p>Include a public channel URL and how you plan to use it.</p>"
+                "<p>Approved applicants receive a 365-day access code.</p>"
+                "<p>No review, positive rating, purchase, or product feedback is required.</p>"
+                "</main>"
+            ),
+        )
+        self.assertEqual(errors, [])
+
+    def test_creator_source_missing_no_obligation_contract_fails(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.creator_facts(),
+            fetch=lambda _url: (
+                "<main><h2>Creator Sponsorship</h2>"
+                "<p>Include a public creator URL and how you plan to use it.</p>"
+                "<p>Approved applicants receive a 365-day access code.</p></main>"
+            ),
+        )
+        self.assertTrue(any("current Creator application" in error for error in errors))
 
 
 if __name__ == "__main__":

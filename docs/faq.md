@@ -26,11 +26,11 @@ Pricing, trial terms, and availability are commercial information maintained on 
 
 ## Which plans are current?
 
-Air, Desktop, and Pro are the current individual plan families. Their hardware-dependent fan, battery, and sleep/display combinations are explained on the official website. Enterprise plans are roadmap directions, not currently available product plans; see [Roadmap and non-current programs](roadmap.md).
+Air, Desktop, and Pro are the current individual plan families. Their hardware-dependent fan, battery, and sleep/display combinations are explained on the official website. Enterprise plans are roadmap directions, not currently available product plans; see [Roadmap and collaboration programs](roadmap.md).
 
-## Where are non-current programs described?
+## Where are Creator Sponsorship and Supporters described?
 
-Future product and access-program directions are kept in [Roadmap and non-current programs](roadmap.md). They are not current product or operating claims.
+Their separate contracts are kept in [Roadmap and collaboration programs](roadmap.md). Creator Sponsorship applications are currently open and approved creators receive one 365-day code without a required review, positive rating, purchase, or product feedback. Supporters is a separate early referral program; referral tracking and payout are not guaranteed until the full operating flow is verified end to end.
 
 ## Where are release notes?
 
