@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = {
     "README.md",
+    "llms.txt",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "KNOWN_LIMITATIONS.md",
@@ -65,7 +66,14 @@ EXPECTED_FACT_STATUSES = {
     "low-battery-sleep-return": "available",
     "heat-protection": "available",
     "virtual-clamshell": "available",
-    "individual-plans": "available",
+    "individual-plan-lineup": "available",
+    "power-only": "available",
+    "safety-drain": "available",
+    "coordinated-operating-state": "available",
+    "long-running-workloads": "available",
+    "fan-feedback-control": "available",
+    "control-interlocks": "available",
+    "workload-auto-detection": "roadmap",
     "enterprise-single": "roadmap",
     "enterprise-fleet": "roadmap",
     "unified-dashboard": "available",
@@ -81,6 +89,10 @@ ROADMAP_ONLY_TERMS = {
 }
 ROADMAP_TEXT_FILES = {
     Path("docs/roadmap.md"),
+}
+ROADMAP_REFERENCE_FILES = {
+    Path("README.md"),
+    Path("llms.txt"),
 }
 PROMOTION_PATTERNS = (
     re.compile(
@@ -200,13 +212,17 @@ def validate_roadmap_boundaries(errors: list[str]) -> None:
 
     for path in text_files():
         relative = path.relative_to(ROOT)
-        if relative == Path("data/public-facts.json") or relative in ROADMAP_TEXT_FILES:
+        if (
+            relative == Path("data/public-facts.json")
+            or relative in ROADMAP_TEXT_FILES
+            or relative in ROADMAP_REFERENCE_FILES
+        ):
             continue
         content = path.read_text(encoding="utf-8")
         for term in roadmap_only_terms(content):
             fail(errors, f"{relative}: non-current term outside roadmap surfaces: {term}")
 
-    for relative in sorted(ROADMAP_TEXT_FILES):
+    for relative in sorted(ROADMAP_TEXT_FILES | ROADMAP_REFERENCE_FILES):
         content = (ROOT / relative).read_text(encoding="utf-8")
         for claim in noncurrent_promotion_claims(content):
             fail(errors, f"{relative}: non-current item promoted as current: {claim}")

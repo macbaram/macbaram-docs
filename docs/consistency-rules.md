@@ -25,6 +25,6 @@ An unreviewed GitHub change must never update the product website, installer man
 
 The repository validator rejects version-specific package links, duplicated price values, internal paths or component names, secret-like material, unsupported guarantees, broken relative links, missing required documents, invalid public-fact status values, non-official fact sources, and an invalid README length.
 
-The validator also requires the current individual-plan boundary and the reviewed roadmap machine statuses. It rejects future or inactive items when a reviewed machine status or the dedicated roadmap surface promotes them as current, and it rejects their detailed copy outside that roadmap surface.
+The validator also requires the current individual-plan boundary and the reviewed roadmap machine statuses. It rejects future or inactive items when a reviewed machine status or an approved roadmap-reference surface promotes them as current. `docs/roadmap.md` may explain future directions; `README.md` and `llms.txt` may only identify a non-current direction while explicitly stating that it is not available in current plans.
 
 The validator is a guard, not approval. Passing it does not promote a feature or authorize a release.

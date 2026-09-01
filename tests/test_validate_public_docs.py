@@ -76,13 +76,27 @@ class StatusBoundaryTests(unittest.TestCase):
 
     def test_unregistered_fact_is_rejected(self) -> None:
         facts = self.valid_facts()
-        facts["ollama-auto-detection"] = {
-            "id": "ollama-auto-detection",
+        facts["fictional-auto-tuning"] = {
+            "id": "fictional-auto-tuning",
             "status": "available",
         }
         errors: list[str] = []
         VALIDATOR.validate_fact_status_contract(errors, facts)
-        self.assertIn("unregistered public fact: ollama-auto-detection", errors)
+        self.assertIn("unregistered public fact: fictional-auto-tuning", errors)
+
+    def test_all_approved_current_and_roadmap_facts_are_required(self) -> None:
+        required = {
+            "virtual-clamshell": "available",
+            "power-only": "available",
+            "safety-drain": "available",
+            "heat-protection": "available",
+            "individual-plan-lineup": "available",
+            "workload-auto-detection": "roadmap",
+            "enterprise-single": "roadmap",
+            "enterprise-fleet": "roadmap",
+        }
+        for fact_id, status in required.items():
+            self.assertEqual(VALIDATOR.EXPECTED_FACT_STATUSES[fact_id], status)
 
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
@@ -130,6 +144,12 @@ class StatusBoundaryTests(unittest.TestCase):
         claims = VALIDATOR.noncurrent_promotion_claims(
             "Enterprise Single is not currently available.\n"
             "No public operating launch is declared for Creator Sponsorship."
+        )
+        self.assertEqual(claims, [])
+
+    def test_approved_reference_surfaces_must_keep_roadmap_negative(self) -> None:
+        claims = VALIDATOR.noncurrent_promotion_claims(
+            "Enterprise Single is not a current plan or feature."
         )
         self.assertEqual(claims, [])
 

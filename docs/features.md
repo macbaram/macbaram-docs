@@ -14,6 +14,12 @@ On supported portable Macs, MacBaram provides charging-related limits intended f
 
 Charging controls depend on the battery and power capabilities reported by the current Mac. They are not shown on desktop Macs. MacBaram does not promise a particular battery-health or battery-lifespan outcome.
 
+### Power-Only and Safety Drain
+
+On supported portable Macs, Power-Only can keep operation primarily on external power after the selected charging target is reached and the current hardware and power state allow it. It does not claim that the battery is physically disconnected or uninvolved in every transient condition.
+
+Safety Drain can return a battery that is above the selected target toward that target by temporarily withholding supported charging and using the Mac's normal system load. It does not create an artificial discharge workload. After the target is reached, MacBaram resumes the selected charging policy.
+
 ## Heat Protection
 
 On a supported fan-equipped MacBook, Heat Protection can use one high battery-temperature condition to pause charging and coordinate an available fan response. After cooling, it returns to the active user fan curve or toward macOS automatic control according to the current policy. A fanless Mac can pause supported charging but does not gain a fan.
@@ -32,7 +38,13 @@ Virtual Clamshell does not bypass a lock, login, application permission, or remo
 
 ## Low-battery return to normal sleep
 
-The user can set a low-battery threshold for long-work protection. When that level is reached, MacBaram can release sleep prevention and allow macOS to return to its normal sleep behavior. This prevents the keep-awake setting itself from remaining active without a configured battery boundary.
+The user can set a low-battery threshold for long-work protection. When that level is reached, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. This does not guarantee that an application has saved or completed its work.
+
+## Coordinated long-running work
+
+MacBaram does not optimize or operate Ollama, LM Studio, Final Cut Pro, Blender, Xcode, Claude Code, Docker, or another workload application itself. It coordinates the supported Mac conditions around work such as local AI, builds and tests, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote sessions.
+
+Current Air, Desktop, and Pro plans require the user to choose controls and presets. They do not automatically detect Ollama or switch settings by workload. Workload-aware assistance remains a future direction, not a current feature; see the [roadmap](roadmap.md).
 
 ## Unified dashboard
 

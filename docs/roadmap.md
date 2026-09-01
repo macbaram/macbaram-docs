@@ -4,7 +4,7 @@ Nothing on this page makes a MacBaram feature, product plan, referral operation,
 
 ## Enterprise Single
 
-Enterprise Single is a future direction for understanding and operating one Mac more deeply. The direction includes workload-aware assistance, including possible Ollama workload detection, and deeper explanation or automation around a single Mac. Existing detector or preset scaffolding does not make automatic workload detection available in Air, Desktop, or Pro.
+Enterprise Single is a future direction for understanding and operating one Mac more deeply. The direction includes workload-aware assistance, including possible Ollama and application workload detection, and deeper explanation or automation around a single Mac. Current Air, Desktop, and Pro plans require user-selected controls and presets; they do not automatically detect Ollama or switch settings by workload.
 
 The exact detected applications, switching rules, restoration behavior, reports, price, and release date are not public commitments.
 
