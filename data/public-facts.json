@@ -47,6 +47,41 @@
       "source_url": "https://www.macbaram.com/"
     },
     {
+      "id": "heat-protection",
+      "status": "available",
+      "summary": "On supported fan-equipped MacBooks, Heat Protection can coordinate a charging pause and an available fan response from the same battery-temperature condition, then restore the active fan policy after cooling.",
+      "verified_on": "2026-09-01",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "virtual-clamshell",
+      "status": "available",
+      "summary": "Virtual Clamshell is available on supported Apple silicon MacBooks for lid-closed work without a real external monitor, subject to its hardware, power, permission, and workload boundaries.",
+      "verified_on": "2026-09-01",
+      "source_url": "https://www.macbaram.com/guides/keep-mac-awake/"
+    },
+    {
+      "id": "individual-plans",
+      "status": "available",
+      "summary": "Air, Desktop, and Pro are the current individual plan families; commercial availability and exact terms remain canonical on the official website.",
+      "verified_on": "2026-09-01",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "enterprise-single",
+      "status": "roadmap",
+      "summary": "Enterprise Single is a future single-Mac direction and is not a currently available product plan.",
+      "verified_on": "2026-09-01",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "enterprise-fleet",
+      "status": "roadmap",
+      "summary": "Enterprise Fleet is a future organization-level multi-Mac direction and is not a currently available product plan.",
+      "verified_on": "2026-09-01",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
       "id": "unified-dashboard",
       "status": "available",
       "summary": "Fan, battery, power, and sleep state are presented in one dashboard.",

@@ -13,7 +13,7 @@
   <a href="CHANGELOG.md">Update Notes</a>
 </p>
 
-MacBaram is a native macOS utility for people who leave demanding work running on their Mac. Local AI, development, video exports, and other long jobs can keep a Mac busy for hours. During that time, fan behavior, charging, and sleep are usually managed in separate places. MacBaram brings those controls and their current state into one app.
+MacBaram is a native macOS utility for demanding work that runs for hours. Local AI, development, video exports, backups, downloads, and automation can keep a Mac busy while temperature, fan response, charging, the display, and sleep change. MacBaram treats the supported controls around that work as one operating state instead of unrelated utilities.
 
 This repository is MacBaram's public technical knowledge base. It contains product explanations, support guidance, compatibility boundaries, and public update notes. It does **not** contain the MacBaram source code, installer packages, licensing systems, private diagnostics, or internal operations material.
 
@@ -25,19 +25,23 @@ _The dashboard presents verified controls and state for the current Mac. Hardwar
 
 A long-running job does not happen in a single, fixed system state. Temperature and fan response change with load. A portable Mac may remain connected to power and fully charged for a long period. A job can also stop when macOS goes to sleep.
 
-MacBaram gives supported Macs one place to manage these related conditions without presenting them as guaranteed performance improvements or guaranteed hardware protection. The app shows what it can control on the current Mac and keeps unsupported controls unavailable.
+MacBaram gives supported Macs one place to manage these related conditions without presenting them as guaranteed performance improvements or guaranteed hardware protection. Feedback-based fan control responds to measured state, while capability, temperature, remaining-charge, license, and connection interlocks decide when an intervention is allowed and when MacBaram should return control toward macOS defaults. The app shows what it can control on the current Mac and keeps unsupported controls unavailable.
 
-A local AI job is a practical example: it may run for hours while fan response, charging state, and sleep conditions change. MacBaram keeps those controls visible together; the longer workflow explanation remains in the official [Local AI guide](https://www.macbaram.com/guides/local-ai-mac-workloads/).
+The name carries the same product idea. **Baram** means “wind” in Korean. MacBaram was developed in Korea to manage the heat and airflow around sustained Mac work with clear feedback and recoverable control. That origin is part of the product identity, not a claim of technical superiority or a guaranteed result.
 
 ## Available now
 
 - **Fan curves and fan control** — Set a user-defined response curve and choose how supported fans react across temperature ranges.
 - **Charging controls** — Set charging-related limits on supported portable Macs.
+- **Heat Protection** — Use one supported battery-temperature condition to pause charging and coordinate an available fan response, then restore the active fan policy after cooling.
 - **Sleep prevention for long work** — Keep supported work from being interrupted by normal system sleep when the feature is active.
+- **Display and Virtual Clamshell controls** — Let the physical display turn off while supported work continues, including a virtual screen session for lid-closed work on supported Apple silicon MacBooks without a real external monitor.
 - **Low-battery return to normal sleep** — At the battery level selected by the user, MacBaram can release sleep prevention so macOS can return to its normal sleep behavior.
 - **Unified dashboard** — Review fan, battery, power, and sleep state together instead of checking separate utilities.
 
 The exact controls shown depend on the hardware capabilities detected on that Mac. A desktop Mac has no portable battery controls, and a fanless Mac has no fan controls.
+
+The current individual plan families are **Air**, **Desktop**, and **Pro**. They expose different combinations of fan, battery, and sleep/display controls according to hardware capability. Current pricing, trial terms, purchase availability, and the exact plan matrix remain on the official website. Enterprise directions and access programs that are not currently active are kept separately in [Roadmap and non-current programs](docs/roadmap.md).
 
 ## Supported Macs
 
@@ -53,19 +57,15 @@ MacBaram does not promise a specific performance increase, a particular throttli
 
 ## Download and pricing
 
-The only canonical public download address is:
-
-**[Download MacBaram from the official website](https://www.macbaram.com/download)**
-
-Installer packages are not published through GitHub Releases. Do not download a MacBaram installer from a repository attachment, issue, comment, mirror, or third-party file host.
-
-Current plans, trial terms, and pricing are maintained only on the [official MacBaram website](https://www.macbaram.com/#pricing). They are intentionally not duplicated here because commercial terms can change independently of the technical documentation.
+Use only the canonical **[MacBaram download](https://www.macbaram.com/download)**. GitHub Releases, repository attachments, comments, mirrors, and third-party hosts are not installer channels. Current plans, trial terms, and pricing remain on the [official website](https://www.macbaram.com/#pricing) so commercial information has one source.
 
 ## Documentation
 
 - [Documentation index](docs/README.md)
 - [Features and behavior](docs/features.md)
 - [Battery-aware sleep](docs/battery-aware-sleep.md)
+- [Heat Protection](docs/heat-protection.md)
+- [Roadmap and non-current programs](docs/roadmap.md)
 - [Supported Macs](docs/supported-macs.md)
 - [Safety and permissions](docs/safety-and-permissions.md)
 - [Known limitations](KNOWN_LIMITATIONS.md)
@@ -78,12 +78,8 @@ The official [MacBaram Guides](https://www.macbaram.com/guides/) provide longer 
 
 ## Support and feedback
 
-Start with [SUPPORT.md](SUPPORT.md). Public issues are suitable for reproducible, non-sensitive problems and documentation feedback. Never post email addresses, account identifiers, serial numbers, payment details, license data, full logs, or raw diagnostic archives in a public issue.
-
-Security concerns should follow [SECURITY.md](SECURITY.md) and must not be disclosed in a public issue.
-
-Documentation corrections are welcome through the process in [CONTRIBUTING.md](CONTRIBUTING.md). This does not open the private application source for code contributions.
+Start with [SUPPORT.md](SUPPORT.md). Public issues are for reproducible, non-sensitive problems and documentation feedback; never post account, payment, license, device, or raw diagnostic data. Report security concerns through [SECURITY.md](SECURITY.md), and submit documentation corrections through [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Source availability
 
-MacBaram is proprietary, closed-source software. This public repository documents the product; it does not grant a license to the application source code, artwork, installer, or brand assets. Contributions to public documentation may be accepted separately from the application itself.
+MacBaram is proprietary, closed-source software. This repository documents the product; it does not license the application source, artwork, installer, or brand assets.

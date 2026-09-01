@@ -4,7 +4,7 @@ MacBaram treats fan, charging, and sleep as related parts of a long-running Mac 
 
 ## Fan control
 
-On supported Macs with controllable fans, a user can define a fan curve across temperature ranges and select the intended response. MacBaram reports the current state so the control is not separated from the workload it affects.
+On supported Macs with controllable fans, a user can define a fan curve across temperature ranges and select the intended response. The control uses measured temperature feedback rather than assuming that one fixed fan command remains correct as conditions change. MacBaram reports the current state so the control is not separated from the workload it affects.
 
 Fan control is not available on fanless Macs or when the required hardware capability cannot be verified. MacBaram does not claim that a selected curve will produce a specific throttling or performance result.
 
@@ -14,9 +14,21 @@ On supported portable Macs, MacBaram provides charging-related limits intended f
 
 Charging controls depend on the battery and power capabilities reported by the current Mac. They are not shown on desktop Macs. MacBaram does not promise a particular battery-health or battery-lifespan outcome.
 
+## Heat Protection
+
+On a supported fan-equipped MacBook, Heat Protection can use one high battery-temperature condition to pause charging and coordinate an available fan response. After cooling, it returns to the active user fan curve or toward macOS automatic control according to the current policy. A fanless Mac can pause supported charging but does not gain a fan.
+
 ## Sleep prevention
 
 MacBaram can prevent normal system sleep while a long-running job is active. This helps avoid an avoidable sleep interruption, but it does not guarantee that an application, network connection, power source, or workload will remain available.
+
+The display and system-sleep controls are separate. A user can allow the physical display to turn off while supported work continues.
+
+## Virtual Clamshell
+
+On supported Apple silicon MacBooks, Virtual Clamshell can maintain a software virtual display for lid-closed work without requiring a dummy display adapter. This lets the closed built-in panel turn off while an already authorized screen session remains available. When a real external monitor is connected, MacBaram releases the virtual-display path and uses the normal external-display workflow.
+
+Virtual Clamshell does not bypass a lock, login, application permission, or remote-tool authorization. An existing remote-control or screen-control tool must keep its own connection and permission, and the workload must still be checked independently.
 
 ## Low-battery return to normal sleep
 
@@ -24,6 +36,6 @@ The user can set a low-battery threshold for long-work protection. When that lev
 
 ## Unified dashboard
 
-Fan, battery, power, and sleep state are shown together. The dashboard is evidence of the current Mac's detected capabilities; it is not a promise that every control exists on every model.
+Fan, battery, power, display, and sleep state are shown together. The dashboard is evidence of the current Mac's detected capabilities; it is not a promise that every control exists on every model.
 
 For longer explanations, see the official guides for [Mac fan control](https://www.macbaram.com/guides/mac-fan-control/), [battery charge limits](https://www.macbaram.com/guides/mac-battery-charge-limit/), and [keeping a Mac awake](https://www.macbaram.com/guides/keep-mac-awake/).

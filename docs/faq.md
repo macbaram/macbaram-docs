@@ -24,6 +24,14 @@ No. MacBaram provides controls and visibility. Results depend on the Mac, worklo
 
 Pricing, trial terms, and availability are commercial information maintained on the [official website](https://www.macbaram.com/#pricing). Keeping one commercial source prevents stale or conflicting copies.
 
+## Which plans are current?
+
+Air, Desktop, and Pro are the current individual plan families. Their hardware-dependent fan, battery, and sleep/display combinations are explained on the official website. Enterprise plans are roadmap directions, not currently available product plans; see [Roadmap and non-current programs](roadmap.md).
+
+## Where are non-current programs described?
+
+Future product and access-program directions are kept in [Roadmap and non-current programs](roadmap.md). They are not current product or operating claims.
+
 ## Where are release notes?
 
 User-visible changes appear in [CHANGELOG.md](../CHANGELOG.md) only after the corresponding release has been promoted to the official download channel and verified there.
