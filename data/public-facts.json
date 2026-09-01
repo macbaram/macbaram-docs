@@ -15,56 +15,140 @@
       "id": "apple-silicon-requirement",
       "status": "available",
       "summary": "MacBaram requires Apple silicon and macOS 13 or later.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "fan-control",
       "status": "available",
       "summary": "User-defined fan curves and fan control are available when the Mac reports a verified controllable-fan capability.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/guides/mac-fan-control/"
     },
     {
       "id": "charging-controls",
       "status": "available",
       "summary": "Charging-related limits are available on supported portable Macs.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/guides/mac-battery-charge-limit/"
     },
     {
       "id": "sleep-prevention",
       "status": "available",
       "summary": "Sleep prevention is available for long-running work on supported Macs.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/guides/keep-mac-awake/"
     },
     {
       "id": "low-battery-sleep-return",
       "status": "available",
-      "summary": "At the user-configured low-battery threshold, MacBaram can release sleep prevention and allow normal macOS sleep behavior.",
-      "verified_on": "2026-08-29",
+      "summary": "At the user-selected low-battery threshold, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "heat-protection",
+      "status": "available",
+      "summary": "On supported fan-equipped MacBooks, Heat Protection can coordinate a charging pause and an available fan response from the same battery-temperature condition, then restore the active fan policy after cooling.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "virtual-clamshell",
+      "status": "available",
+      "summary": "Virtual Clamshell is available on supported Apple silicon MacBooks: the built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/guides/keep-mac-awake/"
+    },
+    {
+      "id": "individual-plan-lineup",
+      "status": "available",
+      "summary": "Air, Desktop, and Pro are the current individual plan families; commercial availability and exact terms remain canonical on the official website.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "power-only",
+      "status": "available",
+      "summary": "On supported portable Macs, Power-Only can keep operation primarily on external power after the selected charging target is reached and the current hardware and power state allow it.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/guides/mac-battery-charge-limit/"
+    },
+    {
+      "id": "safety-drain",
+      "status": "available",
+      "summary": "On supported portable Macs, Safety Drain can use the Mac's normal system load to return a battery above its selected target toward that target before resuming the selected charging policy.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/guides/mac-battery-charge-limit/"
+    },
+    {
+      "id": "coordinated-operating-state",
+      "status": "available",
+      "summary": "MacBaram coordinates supported fan, battery, power, display, and sleep controls as one operating state rather than presenting them only as unrelated utilities.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "long-running-workloads",
+      "status": "available",
+      "summary": "MacBaram manages supported Mac operating conditions around long-running work such as local AI, builds and tests, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote sessions; it does not operate those workload applications themselves.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "fan-feedback-control",
+      "status": "available",
+      "summary": "On supported fan-equipped Macs, fan curves use measured temperature feedback instead of assuming that one fixed command remains appropriate as conditions change.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/guides/mac-fan-control/"
+    },
+    {
+      "id": "control-interlocks",
+      "status": "available",
+      "summary": "MacBaram keeps a control unavailable or returns supported behavior toward macOS defaults when required public-safe hardware, temperature, power, or session conditions are not satisfied.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "workload-auto-detection",
+      "status": "roadmap",
+      "summary": "Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch settings by workload; workload-aware assistance belongs to the Enterprise Single roadmap.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "enterprise-single",
+      "status": "roadmap",
+      "summary": "Enterprise Single is a future single-Mac direction and is not a currently available product plan.",
+      "verified_on": "2026-09-02",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "enterprise-fleet",
+      "status": "roadmap",
+      "summary": "Enterprise Fleet is a future organization-level multi-Mac direction and is not a currently available product plan.",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "unified-dashboard",
       "status": "available",
       "summary": "Fan, battery, power, and sleep state are presented in one dashboard.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "intel-mac",
       "status": "unsupported",
       "summary": "Intel Macs are not supported.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "imac",
       "status": "unsupported",
       "summary": "iMac support is not currently declared; affected controls remain unavailable when required capability is not verified.",
-      "verified_on": "2026-08-29",
+      "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     }
   ]

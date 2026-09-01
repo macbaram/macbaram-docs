@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = {
     "README.md",
+    "llms.txt",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "KNOWN_LIMITATIONS.md",
@@ -24,6 +25,7 @@ REQUIRED = {
     "docs/safety-and-permissions.md",
     "docs/troubleshooting.md",
     "docs/faq.md",
+    "docs/roadmap.md",
     "docs/consistency-rules.md",
     "docs/update-policy.md",
     "data/public-facts.json",
@@ -40,7 +42,6 @@ FORBIDDEN_PATTERNS = {
     "technical download path": re.compile(r"(?:/downloads/|\blatest\.json\b)", re.I),
     "stale download preparation copy": re.compile(r"다운로드\s*준비\s*중"),
     "test-mode publication": re.compile(r"\btest mode\b", re.I),
-    "undisclosed enterprise copy": re.compile(r"\b(?:Enterprise Single|Enterprise Fleet)\b", re.I),
     "duplicated dollar price": re.compile(r"\$\s*\d"),
     "duplicated monthly price": re.compile(r"\b(?:per month|monthly price)\b", re.I),
     "duplicated commercial state": re.compile(
@@ -57,6 +58,56 @@ FORBIDDEN_PATTERNS = {
     "complete protection claim": re.compile(r"\b(?:complete|perfect|total) (?:hardware )?protection\b", re.I),
     "iMac support claim": re.compile(r"\biMac (?:is )?(?:fully )?supported\b", re.I),
 }
+EXPECTED_FACT_STATUSES = {
+    "apple-silicon-requirement": "available",
+    "fan-control": "available",
+    "charging-controls": "available",
+    "sleep-prevention": "available",
+    "low-battery-sleep-return": "available",
+    "heat-protection": "available",
+    "virtual-clamshell": "available",
+    "individual-plan-lineup": "available",
+    "power-only": "available",
+    "safety-drain": "available",
+    "coordinated-operating-state": "available",
+    "long-running-workloads": "available",
+    "fan-feedback-control": "available",
+    "control-interlocks": "available",
+    "workload-auto-detection": "roadmap",
+    "enterprise-single": "roadmap",
+    "enterprise-fleet": "roadmap",
+    "unified-dashboard": "available",
+    "intel-mac": "unsupported",
+    "imac": "unsupported",
+}
+ROADMAP_ONLY_TERMS = {
+    "Enterprise Single",
+    "Enterprise Fleet",
+    "Creator Sponsorship",
+    "Creator Access",
+    "Supporters",
+}
+ROADMAP_TEXT_FILES = {
+    Path("docs/roadmap.md"),
+}
+ROADMAP_REFERENCE_FILES = {
+    Path("README.md"),
+    Path("llms.txt"),
+}
+PROMOTION_PATTERNS = (
+    re.compile(
+        r"\b(?:(?:is|are)\s+(?:currently\s+)?(?:available|open|operational|live)|"
+        r"currently\s+(?:available|open|operational|live)|available\s+now|"
+        r"current\s+(?:product\s+)?plan|on\s+sale|(?:has\s+)?launched|"
+        r"released\s+(?:today|now)|went\s+live)\b",
+        re.I,
+    ),
+    re.compile(r"(?:현재\s*(?:판매|제공|이용|운영)|판매\s*중|운영\s*중|모집\s*중|정산\s*중|지급\s*중|출시(?:됐|되었|되었습니다|했습니다|함|됨))"),
+)
+NEGATED_PROMOTION_PATTERNS = (
+    re.compile(r"\b(?:not|no|does\s+not|is\s+not|are\s+not)\b", re.I),
+    re.compile(r"(?:아닙니다|않습니다|없습니다|미검증|증명\s*전|전에는)"),
+)
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -95,6 +146,7 @@ def validate_public_facts(errors: list[str]) -> None:
         fail(errors, "status_values must match the approved status vocabulary")
 
     seen: set[str] = set()
+    facts_by_id: dict[str, dict[str, object]] = {}
     for index, fact in enumerate(data.get("facts", [])):
         prefix = f"facts[{index}]"
         required = {"id", "status", "summary", "verified_on", "source_url"}
@@ -105,6 +157,7 @@ def validate_public_facts(errors: list[str]) -> None:
         if fact["id"] in seen:
             fail(errors, f"duplicate fact id: {fact['id']}")
         seen.add(fact["id"])
+        facts_by_id[fact["id"]] = fact
         if fact["status"] not in ALLOWED_STATUSES:
             fail(errors, f"{prefix} has invalid status: {fact['status']}")
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", fact["verified_on"]):
@@ -112,6 +165,31 @@ def validate_public_facts(errors: list[str]) -> None:
         parsed = urlparse(fact["source_url"])
         if parsed.scheme != "https" or parsed.netloc != OFFICIAL_ORIGIN:
             fail(errors, f"{prefix} source_url must use the official HTTPS origin")
+
+    validate_fact_status_contract(errors, facts_by_id)
+
+
+def validate_fact_status_contract(
+    errors: list[str], facts_by_id: dict[str, dict[str, object]]
+) -> None:
+    unknown = set(facts_by_id) - set(EXPECTED_FACT_STATUSES)
+    for fact_id in sorted(unknown):
+        fail(errors, f"unregistered public fact: {fact_id}")
+
+    for fact_id, expected_status in EXPECTED_FACT_STATUSES.items():
+        fact = facts_by_id.get(fact_id)
+        if fact is None:
+            fail(errors, f"missing required public fact: {fact_id}")
+        elif fact.get("status") != expected_status:
+            fail(
+                errors,
+                f"public fact {fact_id} must be {expected_status}, got {fact.get('status')}",
+            )
+        elif expected_status in {"roadmap", "concept"}:
+            summary = str(fact.get("summary", ""))
+            claims = noncurrent_promotion_claims(summary)
+            if claims:
+                fail(errors, f"public fact {fact_id} promotes a non-current item: {claims[0]}")
 
 
 def validate_content(errors: list[str]) -> None:
@@ -125,6 +203,53 @@ def validate_content(errors: list[str]) -> None:
         for url in re.findall(r"https?://[^\s)>\]`]+", content):
             if ".pkg" in url.lower():
                 fail(errors, f"{relative}: package URLs are not public documentation links")
+
+
+def validate_roadmap_boundaries(errors: list[str]) -> None:
+    roadmap = (ROOT / "docs/roadmap.md").read_text(encoding="utf-8")
+    if "Nothing on this page makes" not in roadmap:
+        fail(errors, "docs/roadmap.md must state that roadmap copy does not activate a feature or operation")
+
+    for path in text_files():
+        relative = path.relative_to(ROOT)
+        if (
+            relative == Path("data/public-facts.json")
+            or relative in ROADMAP_TEXT_FILES
+            or relative in ROADMAP_REFERENCE_FILES
+        ):
+            continue
+        content = path.read_text(encoding="utf-8")
+        for term in roadmap_only_terms(content):
+            fail(errors, f"{relative}: non-current term outside roadmap surfaces: {term}")
+
+    for relative in sorted(ROADMAP_TEXT_FILES | ROADMAP_REFERENCE_FILES):
+        content = (ROOT / relative).read_text(encoding="utf-8")
+        for claim in noncurrent_promotion_claims(content):
+            fail(errors, f"{relative}: non-current item promoted as current: {claim}")
+
+
+def roadmap_only_terms(content: str) -> set[str]:
+    folded = content.casefold()
+    return {term for term in ROADMAP_ONLY_TERMS if term.casefold() in folded}
+
+
+def noncurrent_promotion_claims(content: str) -> list[str]:
+    claims: list[str] = []
+    for line in content.splitlines():
+        for sentence in re.split(r"(?<=[.!?。！？])\s+", line):
+            clauses = re.split(
+                r"\s*(?:[,;]|\bbut\b|\bwhile\b|\bwhereas\b|\band\b|하지만|다만|그리고)\s*",
+                sentence,
+                flags=re.I,
+            )
+            for clause in clauses:
+                if not roadmap_only_terms(clause):
+                    continue
+                if any(pattern.search(clause) for pattern in NEGATED_PROMOTION_PATTERNS):
+                    continue
+                if any(pattern.search(clause) for pattern in PROMOTION_PATTERNS):
+                    claims.append(clause.strip())
+    return claims
 
 
 def validate_relative_links(errors: list[str]) -> None:
@@ -191,6 +316,7 @@ def main() -> int:
         return 1
     validate_public_facts(errors)
     validate_content(errors)
+    validate_roadmap_boundaries(errors)
     validate_relative_links(errors)
     validate_visual_assets(errors)
     validate_readme(errors)

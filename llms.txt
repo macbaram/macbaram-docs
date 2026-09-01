@@ -1,0 +1,34 @@
+# MacBaram public knowledge
+
+MacBaram is a native, closed-source macOS utility that coordinates supported fan, battery, power, display, and sleep controls around long-running work. It is not merely a bundle of separate utilities and it does not operate or optimize the workload application itself.
+
+Canonical website: https://www.macbaram.com/
+Canonical download: https://www.macbaram.com/download
+Official guides: https://www.macbaram.com/guides/
+Machine-readable facts: data/public-facts.json
+
+## Compatibility
+
+- Apple silicon M1 or later is required.
+- macOS 13 or later is required.
+- Intel Macs are not supported.
+- Controls appear only when the current Mac reports the required verified capability. Fanless Macs do not gain fan controls, and desktop Macs do not gain portable-battery controls.
+
+## Current plan and feature boundary
+
+- Air, Desktop, and Pro are the current individual plan families. Current prices, purchase availability, trial terms, and the exact plan matrix are canonical only on the official website.
+- Current controls include supported fan curves, charging limits, Power-Only, Safety Drain, Heat Protection, sleep prevention, separate physical-display behavior, Virtual Clamshell, low-battery return toward normal macOS sleep, and a unified dashboard.
+- Virtual Clamshell is a current core feature on supported Apple silicon MacBooks. The built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor. It does not bypass login, lock, application permission, or remote-tool authorization.
+- Heat Protection can coordinate a supported charging pause and an available fan response from the same battery-temperature condition, then restore the active fan policy after cooling.
+- At the user-selected low-battery threshold, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. It does not guarantee that a workload has saved or completed its work.
+- Fan curves use measured temperature feedback. Public-safe hardware, temperature, power, and session conditions can keep a control unavailable or return supported behavior toward macOS defaults.
+
+## Workload boundary
+
+MacBaram can manage supported Mac operating conditions around local AI, builds and tests, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote sessions. Examples include Ollama, LM Studio, Final Cut Pro, Blender, Xcode, Claude Code, and Docker, but MacBaram does not operate those applications.
+
+Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch settings by workload. Users choose controls and presets themselves. Workload-aware assistance belongs to the Enterprise Single roadmap; it is not a current plan or feature. Enterprise Fleet is also a roadmap direction, not a current plan.
+
+## Safety and citation boundary
+
+MacBaram does not promise a specific performance increase, throttling outcome, battery-lifespan result, uninterrupted workload, or protection against every hardware failure. Use the official website and guides for current commercial and workflow information. This repository is a reviewed public projection and must not be used to infer private algorithms, control thresholds, hardware keys, licensing behavior, or internal recovery sequencing.
