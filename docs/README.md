@@ -6,6 +6,7 @@ This directory explains the public, currently verified behavior of MacBaram.
 
 - [Features and behavior](features.md) — what MacBaram currently does and how the controls relate.
 - [Battery-aware sleep](battery-aware-sleep.md) — why a keep-awake request should step back when remaining power becomes more important.
+- [Heat Protection](heat-protection.md) — how a high battery-temperature condition can coordinate charging and available fan control.
 - [Supported Macs](supported-macs.md) — hardware and operating-system boundaries.
 - [Safety and permissions](safety-and-permissions.md) — fail-closed behavior, system access, and user responsibilities.
 - [Known limitations](../KNOWN_LIMITATIONS.md) — current public boundaries that should not be inferred away.
