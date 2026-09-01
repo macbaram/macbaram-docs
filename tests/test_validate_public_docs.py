@@ -169,5 +169,42 @@ class StatusBoundaryTests(unittest.TestCase):
         self.assertTrue(any("non-current term outside roadmap surfaces" in error for error in errors))
 
 
+class LiveSourceEvidenceTests(unittest.TestCase):
+    def facts(self) -> dict[str, dict[str, object]]:
+        return {
+            "apple-silicon-requirement": {
+                "id": "apple-silicon-requirement",
+                "source_url": "https://www.macbaram.com/guides/macbaram-mac-control-guide/",
+            }
+        }
+
+    def test_visible_minimum_macos_copy_passes(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.facts(),
+            fetch=lambda _url: "<main><p>Requires Apple silicon M1 or later and macOS 13 or later.</p></main>",
+        )
+        self.assertEqual(errors, [])
+
+    def test_missing_visible_minimum_macos_copy_fails(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.facts(),
+            fetch=lambda _url: "<main><p>Requires Apple silicon M1 or later.</p></main>",
+        )
+        self.assertTrue(any("source body must state macOS 13 or later" in error for error in errors))
+
+    def test_structured_data_alone_does_not_satisfy_visible_copy(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.facts(),
+            fetch=lambda _url: '<script type="application/ld+json">{"operatingSystem":"macOS 13+"}</script><main><p>Apple silicon Mac.</p></main>',
+        )
+        self.assertTrue(any("source body must state macOS 13 or later" in error for error in errors))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -3,11 +3,14 @@
 
 from __future__ import annotations
 
+import argparse
+import html
 import json
 import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,6 +97,12 @@ ROADMAP_REFERENCE_FILES = {
     Path("README.md"),
     Path("llms.txt"),
 }
+LIVE_SOURCE_REQUIREMENTS = {
+    "apple-silicon-requirement": (
+        re.compile(r"\bmacOS\s*13(?:\+|\s+or\s+(?:later|newer))\b", re.I),
+        "macOS 13 or later",
+    ),
+}
 PROMOTION_PATTERNS = (
     re.compile(
         r"\b(?:(?:is|are)\s+(?:currently\s+)?(?:available|open|operational|live)|"
@@ -130,13 +139,13 @@ def validate_required(errors: list[str]) -> None:
             fail(errors, f"missing required file: {relative}")
 
 
-def validate_public_facts(errors: list[str]) -> None:
+def validate_public_facts(errors: list[str]) -> dict[str, dict[str, object]]:
     path = ROOT / "data/public-facts.json"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         fail(errors, f"invalid public facts JSON: {exc}")
-        return
+        return {}
 
     if data.get("schema_version") != 1:
         fail(errors, "public facts schema_version must be 1")
@@ -167,6 +176,50 @@ def validate_public_facts(errors: list[str]) -> None:
             fail(errors, f"{prefix} source_url must use the official HTTPS origin")
 
     validate_fact_status_contract(errors, facts_by_id)
+    return facts_by_id
+
+
+def visible_page_text(content: str) -> str:
+    content = re.sub(r"<(?:script|style)\b[^>]*>.*?</(?:script|style)>", " ", content, flags=re.I | re.S)
+    content = re.sub(r"<[^>]+>", " ", content)
+    return re.sub(r"\s+", " ", html.unescape(content)).strip()
+
+
+def fetch_official_source(url: str) -> str:
+    request = Request(
+        url,
+        headers={
+            "Accept": "text/html,text/plain;q=0.9",
+            "User-Agent": "MacBaramPublicDocsValidator/1.0",
+        },
+    )
+    with urlopen(request, timeout=15) as response:
+        if urlparse(response.geturl()).netloc != OFFICIAL_ORIGIN:
+            raise ValueError("source response redirected outside the official origin")
+        content = response.read(2_000_001)
+        if len(content) > 2_000_000:
+            raise ValueError("source response exceeds 2 MB")
+        encoding = response.headers.get_content_charset() or "utf-8"
+        return content.decode(encoding, errors="replace")
+
+
+def validate_live_source_evidence(
+    errors: list[str],
+    facts_by_id: dict[str, dict[str, object]],
+    fetch=fetch_official_source,
+) -> None:
+    for fact_id, (pattern, description) in LIVE_SOURCE_REQUIREMENTS.items():
+        fact = facts_by_id.get(fact_id)
+        if fact is None:
+            continue
+        source_url = str(fact.get("source_url", ""))
+        try:
+            source_text = visible_page_text(fetch(source_url))
+        except Exception as exc:
+            fail(errors, f"public fact {fact_id} source could not be read: {exc}")
+            continue
+        if not pattern.search(source_text):
+            fail(errors, f"public fact {fact_id} source body must state {description}: {source_url}")
 
 
 def validate_fact_status_contract(
@@ -308,13 +361,22 @@ def validate_readme(errors: list[str]) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--check-live-sources",
+        action="store_true",
+        help="verify selected fact claims against visible text on their official source pages",
+    )
+    args = parser.parse_args()
     errors: list[str] = []
     validate_required(errors)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    validate_public_facts(errors)
+    facts_by_id = validate_public_facts(errors)
+    if args.check_live_sources:
+        validate_live_source_evidence(errors, facts_by_id)
     validate_content(errors)
     validate_roadmap_boundaries(errors)
     validate_relative_links(errors)
