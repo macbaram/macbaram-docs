@@ -32,7 +32,8 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 ## Creator Sponsorship and Supporters
 
 - Creator Sponsorship applications are currently open for creators with public activity. Applicants provide a public activity URL, their Mac and Apple chip, the requested Air, Desktop, or Pro plan, and the intended use.
-- Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. Selection is individual, not automatic.
+- Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Selection is individual, not automatic.
+- Voluntary feedback about product shortcomings and improvement ideas can inform product development as MacBaram grows with creators; feedback is not an obligation, and no implementation or schedule is promised.
 - Creator Sponsorship is separate from Supporters. Supporters is an early referral program; referral tracking and payout are not guaranteed until the full operating flow is verified end to end.
 
 ## Safety and citation boundary

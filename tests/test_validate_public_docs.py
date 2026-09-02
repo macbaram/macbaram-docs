@@ -54,6 +54,20 @@ class ForbiddenContentTests(unittest.TestCase):
     def test_marketing_cta_does_not_bypass_download_canonical(self) -> None:
         self.assertEqual(self.labels("Official Download: https://www.macbaram.com/download"), set())
 
+    def test_negative_creator_criticism_wording_is_rejected(self) -> None:
+        self.assertIn(
+            "negative creator criticism wording",
+            self.labels("Honest public " + "criticism is not restricted."),
+        )
+
+    def test_positive_review_editorial_independence_is_allowed(self) -> None:
+        self.assertEqual(
+            self.labels(
+                "If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion."
+            ),
+            set(),
+        )
+
 
 class StatusBoundaryTests(unittest.TestCase):
     def valid_facts(self) -> dict[str, dict[str, object]]:
@@ -176,6 +190,31 @@ class StatusBoundaryTests(unittest.TestCase):
             finally:
                 VALIDATOR.ROOT = original_root
         self.assertTrue(any("non-current item promoted as current" in error for error in errors))
+
+    def test_creator_growth_relationship_is_required(self) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            roadmap_path = mutated_root / "docs/roadmap.md"
+            roadmap = roadmap_path.read_text(encoding="utf-8")
+            roadmap_path.write_text(
+                roadmap.replace(
+                    "MacBaram aims to listen to creators who voluntarily share product shortcomings and improvement ideas, consider that input in product development, and grow with creators. ",
+                    "",
+                ),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_roadmap_boundaries(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertIn(
+            "docs/roadmap.md must preserve the voluntary Creator growth relationship",
+            errors,
+        )
 
 
 class LiveSourceEvidenceTests(unittest.TestCase):

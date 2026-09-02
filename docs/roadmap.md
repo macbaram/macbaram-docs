@@ -18,7 +18,9 @@ The fleet architecture, data boundary, retention, price, service level, and rele
 
 Creator Sponsorship applications are currently open for creators with public creator, blog, or community activity. Applicants provide a public activity URL, the Mac model and Apple chip they use, the requested Air, Desktop, or Pro plan, and how they plan to use it. Selection is confirmed individually after review; it is not automatic.
 
-Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. Voluntary feedback is welcome, and honest public criticism is not restricted. Creator Sponsorship is separate from the commission-based Supporters program.
+Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Creator Sponsorship is separate from the commission-based Supporters program.
+
+Feedback is not payment or an obligation. MacBaram aims to listen to creators who voluntarily share product shortcomings and improvement ideas, consider that input in product development, and grow with creators. This does not promise that every suggestion will be implemented or scheduled.
 
 ## Supporters
 

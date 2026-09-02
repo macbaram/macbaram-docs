@@ -60,6 +60,12 @@ FORBIDDEN_PATTERNS = {
     "battery lifespan guarantee": re.compile(r"\bguarantee(?:s|d)? (?:a )?(?:longer|extended) battery (?:life|lifespan)\b", re.I),
     "complete protection claim": re.compile(r"\b(?:complete|perfect|total) (?:hardware )?protection\b", re.I),
     "iMac support claim": re.compile(r"\biMac (?:is )?(?:fully )?supported\b", re.I),
+    "negative creator criticism wording": re.compile(
+        r"(?:honest public "
+        r"criticism is not restricted|솔직한 공개 "
+        r"비판을 제한하지)",
+        re.I,
+    ),
 }
 EXPECTED_FACT_STATUSES = {
     "apple-silicon-requirement": "available",
@@ -276,6 +282,24 @@ def validate_roadmap_boundaries(errors: list[str]) -> None:
         fail(errors, "docs/roadmap.md must preserve the Enterprise and Supporters non-current boundary")
     if "Creator Sponsorship applications are currently open" not in roadmap:
         fail(errors, "docs/roadmap.md must preserve the current Creator application state")
+    creator_relationship = (
+        "listen to creators who voluntarily share product shortcomings and improvement ideas, "
+        "consider that input in product development, and grow with creators"
+    )
+    if creator_relationship not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the voluntary Creator growth relationship")
+    editorial_independence = (
+        "If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion."
+    )
+    if editorial_independence not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve Creator review editorial independence")
+    llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    if (
+        "feedback is not an obligation" not in llms
+        or "MacBaram grows with creators" not in llms
+        or editorial_independence not in llms
+    ):
+        fail(errors, "llms.txt must preserve the voluntary Creator growth relationship")
 
     for path in text_files():
         relative = path.relative_to(ROOT)
