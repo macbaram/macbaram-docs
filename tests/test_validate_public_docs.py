@@ -290,5 +290,37 @@ class LiveSourceEvidenceTests(unittest.TestCase):
         self.assertTrue(any("current Creator application" in error for error in errors))
 
 
+class ControlSessionLifecycleTests(unittest.TestCase):
+    def test_current_control_session_contract_passes(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_control_session_lifecycle(errors)
+        self.assertEqual(errors, [])
+
+    def test_missing_workload_completion_boundary_fails(self) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            lifecycle_path = mutated_root / "docs/control-session-lifecycle.md"
+            lifecycle = lifecycle_path.read_text(encoding="utf-8")
+            lifecycle_path.write_text(
+                lifecycle.replace(
+                    "MacBaram does not detect when every render, build, download, or local AI workload has finished.",
+                    "MacBaram detects when every workload has finished.",
+                ),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_control_session_lifecycle(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertIn(
+            "docs/control-session-lifecycle.md must preserve workload completion boundary",
+            errors,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

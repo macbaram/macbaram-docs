@@ -5,6 +5,7 @@ This directory explains the public, currently verified behavior of MacBaram.
 ## Start here
 
 - [Features and behavior](features.md) — what MacBaram currently does and how the controls relate.
+- [Control session lifecycle](control-session-lifecycle.md) — why temporary keep-awake and display control need explicit, verifiable exit paths.
 - [Battery-aware sleep](battery-aware-sleep.md) — why a keep-awake request should step back when remaining power becomes more important.
 - [Heat Protection](heat-protection.md) — how a high battery-temperature condition can coordinate charging and available fan control.
 - [Roadmap and collaboration programs](roadmap.md) — future product directions plus the distinct Creator Sponsorship and Supporters operating boundaries.

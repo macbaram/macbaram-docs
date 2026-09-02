@@ -23,6 +23,7 @@ REQUIRED = {
     "SUPPORT.md",
     "SECURITY.md",
     "docs/README.md",
+    "docs/control-session-lifecycle.md",
     "docs/features.md",
     "docs/supported-macs.md",
     "docs/safety-and-permissions.md",
@@ -319,6 +320,35 @@ def validate_roadmap_boundaries(errors: list[str]) -> None:
             fail(errors, f"{relative}: non-current item promoted as current: {claim}")
 
 
+def validate_control_session_lifecycle(errors: list[str]) -> None:
+    path = ROOT / "docs/control-session-lifecycle.md"
+    content = path.read_text(encoding="utf-8")
+    required_contracts = {
+        "Apple activity lifecycle": (
+            "beginActivity(options:reason:)",
+            "endActivity(_:)",
+        ),
+        "separate system and display sleep": (
+            "idleSystemSleepDisabled",
+            "idleDisplaySleepDisabled",
+        ),
+        "MacBaram exit boundaries": (
+            "User stop or disable",
+            "Low battery after external power is unavailable",
+            "Lost trusted control or invalid authorization",
+        ),
+        "workload completion boundary": (
+            "MacBaram does not detect when every render, build, download, or local AI workload has finished.",
+        ),
+        "implementation attribution boundary": (
+            "this article does not claim that every MacBaram sleep control is implemented through `ProcessInfo`.",
+        ),
+    }
+    for label, phrases in required_contracts.items():
+        if any(phrase not in content for phrase in phrases):
+            fail(errors, f"docs/control-session-lifecycle.md must preserve {label}")
+
+
 def roadmap_only_terms(content: str) -> set[str]:
     folded = content.casefold()
     return {term for term in ROADMAP_ONLY_TERMS if term.casefold() in folded}
@@ -417,6 +447,7 @@ def main() -> int:
         validate_live_source_evidence(errors, facts_by_id)
     validate_content(errors)
     validate_roadmap_boundaries(errors)
+    validate_control_session_lifecycle(errors)
     validate_relative_links(errors)
     validate_visual_assets(errors)
     validate_readme(errors)
