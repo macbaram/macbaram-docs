@@ -28,6 +28,7 @@ The story did not begin with a new sleep button. It began with a conflict betwee
 
 ## Related documentation
 
+- [A Mac Control Session Needs an Ending](control-session-lifecycle.md)
 - [MacBaram Guide: Battery-aware sleep prevention](https://www.macbaram.com/guides/battery-aware-sleep-prevention/)
 - [Features and behavior](features.md)
 - [Safety and permissions](safety-and-permissions.md)

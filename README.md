@@ -66,6 +66,7 @@ Use only the canonical **[MacBaram download](https://www.macbaram.com/download)*
 
 - [Documentation index](docs/README.md)
 - [Features and behavior](docs/features.md)
+- [Control session lifecycle](docs/control-session-lifecycle.md)
 - [Battery-aware sleep](docs/battery-aware-sleep.md)
 - [Heat Protection](docs/heat-protection.md)
 - [Roadmap and collaboration programs](docs/roadmap.md)
