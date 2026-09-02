@@ -113,13 +113,15 @@ LIVE_SOURCE_REQUIREMENTS = {
     ),
     "creator-sponsorship-application": (
         re.compile(
-            r"(?=.*\bCreator Sponsorship\b)(?=.*\b365-day access code\b)"
+            r"(?=.*\bCreator Sponsorship\b)(?=.*\b365-day (?:Creator )?access code\b)"
             r"(?=.*\bpublic (?:channel|creator|blog|community))"
             r"(?=.*\bhow (?:you|they) plan to use it\b)"
-            r"(?=.*\bNo review, positive rating, purchase, or product feedback is required\b)",
+            r"(?=.*\bFeedback is not a condition of sponsorship\b)"
+            r"(?=.*\bdo not require a review, positive rating, or purchase\b)"
+            r"(?=.*\bdo not influence (?:its|the) content or conclusions?\b)",
             re.I,
         ),
-        "the current Creator application, 365-day access, and no-obligation contract",
+        "the current Creator application, 365-day access, no-obligation contract, and editorial independence",
     ),
 }
 PROMOTION_PATTERNS = (

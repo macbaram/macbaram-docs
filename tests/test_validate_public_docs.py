@@ -270,7 +270,9 @@ class LiveSourceEvidenceTests(unittest.TestCase):
                 "<main><h2>Creator Sponsorship</h2>"
                 "<p>Include a public channel URL and how you plan to use it.</p>"
                 "<p>Approved applicants receive a 365-day access code.</p>"
-                "<p>No review, positive rating, purchase, or product feedback is required.</p>"
+                "<p>Feedback is not a condition of sponsorship.</p>"
+                "<p>We do not require a review, positive rating, or purchase.</p>"
+                "<p>We do not influence its content or conclusions.</p>"
                 "</main>"
             ),
         )
@@ -284,7 +286,9 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             fetch=lambda _url: (
                 "<main><h2>Creator Sponsorship</h2>"
                 "<p>Include a public creator URL and how you plan to use it.</p>"
-                "<p>Approved applicants receive a 365-day access code.</p></main>"
+                "<p>Approved applicants receive a 365-day access code.</p>"
+                "<p>We do not require a review, positive rating, or purchase.</p>"
+                "<p>We do not influence its content or conclusions.</p></main>"
             ),
         )
         self.assertTrue(any("current Creator application" in error for error in errors))
