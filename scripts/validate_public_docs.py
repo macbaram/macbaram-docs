@@ -60,6 +60,12 @@ FORBIDDEN_PATTERNS = {
     "battery lifespan guarantee": re.compile(r"\bguarantee(?:s|d)? (?:a )?(?:longer|extended) battery (?:life|lifespan)\b", re.I),
     "complete protection claim": re.compile(r"\b(?:complete|perfect|total) (?:hardware )?protection\b", re.I),
     "iMac support claim": re.compile(r"\biMac (?:is )?(?:fully )?supported\b", re.I),
+    "negative creator criticism wording": re.compile(
+        r"(?:honest public "
+        r"criticism is not restricted|솔직한 공개 "
+        r"비판을 제한하지)",
+        re.I,
+    ),
 }
 EXPECTED_FACT_STATUSES = {
     "apple-silicon-requirement": "available",
@@ -70,6 +76,8 @@ EXPECTED_FACT_STATUSES = {
     "heat-protection": "available",
     "virtual-clamshell": "available",
     "individual-plan-lineup": "available",
+    "creator-sponsorship-application": "available",
+    "supporters-referral-operation": "concept",
     "power-only": "available",
     "safety-drain": "available",
     "coordinated-operating-state": "available",
@@ -86,8 +94,6 @@ EXPECTED_FACT_STATUSES = {
 ROADMAP_ONLY_TERMS = {
     "Enterprise Single",
     "Enterprise Fleet",
-    "Creator Sponsorship",
-    "Creator Access",
     "Supporters",
 }
 ROADMAP_TEXT_FILES = {
@@ -96,11 +102,23 @@ ROADMAP_TEXT_FILES = {
 ROADMAP_REFERENCE_FILES = {
     Path("README.md"),
     Path("llms.txt"),
+    Path("docs/README.md"),
+    Path("docs/faq.md"),
 }
 LIVE_SOURCE_REQUIREMENTS = {
     "apple-silicon-requirement": (
         re.compile(r"\bmacOS\s*13(?:\+|\s+or\s+(?:later|newer))\b", re.I),
         "macOS 13 or later",
+    ),
+    "creator-sponsorship-application": (
+        re.compile(
+            r"(?=.*\bCreator Sponsorship\b)(?=.*\b365-day access code\b)"
+            r"(?=.*\bpublic (?:channel|creator|blog|community))"
+            r"(?=.*\bhow (?:you|they) plan to use it\b)"
+            r"(?=.*\bNo review, positive rating, purchase, or product feedback is required\b)",
+            re.I,
+        ),
+        "the current Creator application, 365-day access, and no-obligation contract",
     ),
 }
 PROMOTION_PATTERNS = (
@@ -260,8 +278,28 @@ def validate_content(errors: list[str]) -> None:
 
 def validate_roadmap_boundaries(errors: list[str]) -> None:
     roadmap = (ROOT / "docs/roadmap.md").read_text(encoding="utf-8")
-    if "Nothing on this page makes" not in roadmap:
-        fail(errors, "docs/roadmap.md must state that roadmap copy does not activate a feature or operation")
+    if "Nothing on this page makes an Enterprise product direction or a Supporters referral operation" not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the Enterprise and Supporters non-current boundary")
+    if "Creator Sponsorship applications are currently open" not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the current Creator application state")
+    creator_relationship = (
+        "listen to creators who voluntarily share product shortcomings and improvement ideas, "
+        "consider that input in product development, and grow with creators"
+    )
+    if creator_relationship not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve the voluntary Creator growth relationship")
+    editorial_independence = (
+        "If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion."
+    )
+    if editorial_independence not in roadmap:
+        fail(errors, "docs/roadmap.md must preserve Creator review editorial independence")
+    llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    if (
+        "feedback is not an obligation" not in llms
+        or "MacBaram grows with creators" not in llms
+        or editorial_independence not in llms
+    ):
+        fail(errors, "llms.txt must preserve the voluntary Creator growth relationship")
 
     for path in text_files():
         relative = path.relative_to(ROOT)
