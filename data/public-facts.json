@@ -49,7 +49,8 @@
       ],
       "authorization_required_for_reapply": true,
       "work_completion_guaranteed": false,
-      "source_evidence": "pending",
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
       "source_url": "https://www.macbaram.com/guides/battery-aware-sleep-prevention/"
     },
     {
@@ -99,7 +100,8 @@
       "complimentary_account_bound": true,
       "grant_plan_and_period_explicit": true,
       "supporter_affiliate_is_entitlement": false,
-      "source_evidence": "pending",
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
       "source_url": "https://www.macbaram.com/"
     },
     {
@@ -159,8 +161,12 @@
       "affected_controls_available_while_return_pending": false,
       "entitlement_restriction_return_retryable": true,
       "physical_release_evidence_required": true,
-      "source_evidence": "pending",
-      "source_url": "https://www.macbaram.com/"
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+      "supporting_source_urls": [
+        "https://www.macbaram.com/"
+      ]
     },
     {
       "id": "workload-auto-detection",

@@ -485,9 +485,10 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             "For an eligible first-time user, the 5-day period begins at the first successful license check "
             "after Google sign-in. Opening sign-in or clicking a button does not start it. The effective plan "
             "comes from a validated signed license, and the app does not widen access without a valid plan. "
-            "Normal purchase uses Creem and provides access without a complimentary access code. A complimentary "
-            "code creates one account-bound access grant for its selected plan and period. Supporter complimentary "
-            "access is for the Supporter's own account. Creator Access is a separate 365-day opportunity. "
+            "A normal purchase is processed by Creem and grants access without a complimentary access code. "
+            "Supporter complimentary access uses a one-time code bound to the approved Supporter's own account and "
+            "states the approved plan and duration. Creator Access uses a one-time, account-bound 365-day code for "
+            "the selected plan. "
             "A Supporter recommendation connection is not product access, a discount, or code redemption."
         )
         errors: list[str] = []
@@ -534,30 +535,84 @@ class LiveSourceEvidenceTests(unittest.TestCase):
 
     def test_new_public_safe_source_contracts_can_pass(self) -> None:
         facts = {
-            fact_id: {
-                "id": fact_id,
+            "license-access-source-boundary": {
+                "id": "license-access-source-boundary",
                 "source_url": "https://www.macbaram.com/",
-            }
-            for fact_id in (
-                "license-access-source-boundary",
-                "low-battery-sleep-return",
-                "control-interlocks",
-            )
+            },
+            "low-battery-sleep-return": {
+                "id": "low-battery-sleep-return",
+                "source_url": "https://www.macbaram.com/guides/battery-aware-sleep-prevention/",
+            },
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            },
         }
-        source = (
-            "Normal purchase uses Creem-confirmed access without a complimentary access code. "
-            "A complimentary code creates one account-bound access grant for its selected plan and period. "
-            "Supporter complimentary access is for the Supporter's own account. Creator Access is a 365-day opportunity. "
-            "A Supporter recommendation connection is not product access, a discount, or code redemption. "
+        license_source = (
+            "A normal purchase is processed by Creem and grants access without a complimentary access code. "
+            "Supporter complimentary access uses a one-time code bound to the approved Supporter's own account and states the approved plan and duration. "
+            "Creator Access uses a one-time, account-bound 365-day code for the selected plan. "
+            "A Supporter recommendation connection is not product access, a discount, or code redemption."
+        )
+        low_battery_source = (
             "After a brief adapter-disconnect grace period, saved choices may return when external power returns or the "
-            "battery recovers, but only when the current authorization allows them. An authorization-related return is "
-            "complete only after the supported state is verified. Affected optional controls remain unavailable while "
-            "the return is incomplete, and a pending entitlement-restriction return can make another supported attempt. "
-            "The physical release outcome requires separate installation and device-state readback evidence."
+            "battery recovers, but only when the current product access still permits that control."
+        )
+        control_source = (
+            "Sending a restore command "
+            "is not enough to call the return complete. When product access becomes restricted, MacBaram keeps the affected "
+            "selected control unavailable until state readback and may retry a supported return. This does not mean that "
+            "every manual or automatic ending path retries until it is verified."
         )
         errors: list[str] = []
-        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: source)
+        supporting_source = (
+            "A successful restore command alone does not verify that the physical state was restored. "
+            "MacBaram checks available state readback, and physical-release evidence remains separate from source or build checks."
+        )
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            facts,
+            fetch=lambda url: {
+                "https://www.macbaram.com/": f"{license_source} {supporting_source}",
+                "https://www.macbaram.com/guides/battery-aware-sleep-prevention/": low_battery_source,
+                "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/": control_source,
+            }[url],
+        )
         self.assertEqual(errors, [])
+
+    def test_control_interlock_missing_supporting_source_fails(self) -> None:
+        facts = {
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            }
+        }
+        primary = (
+            "Sending a restore command is not enough to call the return complete. When product access becomes restricted, "
+            "MacBaram keeps the affected selected control unavailable until state readback and may retry a supported return. "
+            "This does not mean that every manual or automatic ending path retries until it is verified."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: primary)
+        self.assertTrue(any("supporting source body must state" in error for error in errors))
+
+    def test_control_interlock_missing_primary_source_fails(self) -> None:
+        facts = {
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            }
+        }
+        supporting = (
+            "A successful restore command alone does not verify that the physical state was restored. "
+            "MacBaram checks available state readback, and physical-release evidence remains separate from source or build checks."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: supporting)
+        self.assertTrue(any("source body must state the public-safe authorization return" in error for error in errors))
 
 
 class ControlSessionLifecycleTests(unittest.TestCase):

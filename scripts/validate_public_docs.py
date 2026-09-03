@@ -149,6 +149,7 @@ PUBLIC_FACT_STRUCTURED_REQUIREMENTS = {
         "affected_controls_available_while_return_pending": False,
         "entitlement_restriction_return_retryable": True,
         "physical_release_evidence_required": True,
+        "supporting_source_urls": ["https://www.macbaram.com/"],
     },
 }
 CANONICAL_BASELINE_PHRASES = {
@@ -250,9 +251,8 @@ LIVE_SOURCE_REQUIREMENTS = {
     "license-access-source-boundary": (
         re.compile(
             r"(?=.*\bnormal purchase\b.*\bCreem\b.*\bwithout a complimentary access code\b)"
-            r"(?=.*\bcomplimentary code\b.*\bone account-bound access grant\b.*\bplan\b.*\bperiod\b)"
-            r"(?=.*\bSupporter complimentary access\b.*\bown account\b)"
-            r"(?=.*\bCreator Access\b.*\b365-day\b)"
+            r"(?=.*\bSupporter complimentary access\b.*\bone-time code\b.*\bbound\b.*\bown account\b.*\bplan\b.*\b(?:duration|period)\b)"
+            r"(?=.*\bCreator Access\b.*\bone-time\b.*\baccount-bound\b.*\b365-day\b.*\bselected plan\b)"
             r"(?=.*\bSupporter recommendation connection\b.*\bnot product access\b.*\bdiscount\b.*\bcode redemption\b)",
             re.I,
         ),
@@ -262,22 +262,31 @@ LIVE_SOURCE_REQUIREMENTS = {
         re.compile(
             r"(?=.*\bbrief\b.*\bgrace period\b)"
             r"(?=.*\bexternal power returns\b.*\bbattery recovers\b)"
-            r"(?=.*\bcurrent authorization\b.*\ballows\b)",
+            r"(?=.*\bcurrent (?:authorization|product access)\b.*\b(?:allows|permits)\b)",
             re.I,
         ),
         "the adapter grace, external-power or battery recovery paths, and current-authorization boundary",
     ),
     "control-interlocks": (
         re.compile(
-            r"(?=.*\bauthorization-related return\b.*\bcomplete only after\b.*\bverified\b)"
-            r"(?=.*\boptional controls remain unavailable\b.*\bincomplete\b)"
-            r"(?=.*\bentitlement-restriction return\b.*\banother supported attempt\b)"
-            r"(?=.*\bphysical\b.*\bdevice-state readback evidence\b)",
+            r"(?=.*\brestore command\b.*\bnot enough\b.*\breturn complete\b)"
+            r"(?=.*\bproduct access becomes restricted\b.*\baffected selected control unavailable\b.*\bstate readback\b)"
+            r"(?=.*\bmay retry a supported return\b)"
+            r"(?=.*\bdoes not mean\b.*\bevery manual or automatic ending path retries\b)",
             re.I,
         ),
-        "the public-safe authorization return, retry scope, and physical-evidence boundary",
+        "the public-safe authorization return and limited retry scope",
     ),
 }
+CONTROL_INTERLOCK_SUPPORTING_SOURCE_REQUIREMENT = (
+    re.compile(
+        r"(?=.*\bsuccessful restore command alone does not verify\b.*\bphysical state\b)"
+        r"(?=.*\bchecks available state readback\b)"
+        r"(?=.*\bphysical-release evidence remains separate from source or build checks\b)",
+        re.I,
+    ),
+    "the separate state-readback and physical-release evidence boundary",
+)
 PROMOTION_PATTERNS = (
     re.compile(
         r"\b(?:(?:is|are)\s+(?:currently\s+)?(?:available|open|operational|live)|"
@@ -414,7 +423,23 @@ def validate_live_source_evidence(
             continue
         if not pattern.search(source_text):
             fail(errors, f"public fact {fact_id} source body must state {description}: {source_url}")
-        elif fact.get("source_evidence") == "pending":
+            continue
+        if fact_id == "control-interlocks":
+            supporting_urls = fact.get("supporting_source_urls", [])
+            supporting_url = supporting_urls[0] if isinstance(supporting_urls, list) and supporting_urls else ""
+            supporting_pattern, supporting_description = CONTROL_INTERLOCK_SUPPORTING_SOURCE_REQUIREMENT
+            try:
+                supporting_text = visible_page_text(fetch(str(supporting_url)))
+            except Exception as exc:
+                fail(errors, f"public fact {fact_id} supporting source could not be read: {exc}")
+                continue
+            if not supporting_pattern.search(supporting_text):
+                fail(
+                    errors,
+                    f"public fact {fact_id} supporting source body must state {supporting_description}: {supporting_url}",
+                )
+                continue
+        if fact.get("source_evidence") == "pending":
             fail(errors, f"public fact {fact_id} source now matches but source_evidence is still pending")
 
 
