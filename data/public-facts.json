@@ -71,21 +71,21 @@
       "id": "korean-name-origin",
       "status": "available",
       "summary": "Baram means wind in Korean; the name preserves MacBaram's identity as a product made in Korea and its interest in Mac heat and airflow, without claiming technical superiority, safety, or guaranteed results.",
-      "verified_on": "2026-09-03",
+      "source_evidence": "pending",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "five-day-evaluation-start",
       "status": "available",
-      "summary": "The five-day evaluation period starts after Google authentication when the server confirms account and device eligibility and creates the evaluation entitlement during the first license validation; opening sign-in or clicking a button does not start it, and available features follow the effective plan in the signed entitlement.",
-      "verified_on": "2026-09-03",
+      "summary": "For an eligible first-time user, the five-day evaluation period starts with MacBaram's first successful license check after Google sign-in; opening sign-in or clicking a button does not start it, and available features follow the effective plan in the validated signed license.",
+      "source_evidence": "pending",
       "source_url": "https://www.macbaram.com/"
     },
     {
       "id": "license-access-source-boundary",
       "status": "available",
-      "summary": "Normal purchase, Supporter complimentary access, and Creator Access are distinct: normal purchase uses a confirmed paid entitlement without a complimentary code, the two complimentary programs serve their approved recipients, and a Supporter recommendation connection is not an entitlement, discount, or code redemption.",
-      "verified_on": "2026-09-03",
+      "summary": "Normal purchase access, Supporter complimentary access, and Creator Access are distinct; a Supporter recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
+      "source_evidence": "pending",
       "source_url": "https://www.macbaram.com/"
     },
     {

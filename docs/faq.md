@@ -34,11 +34,11 @@ Air, Desktop, and Pro are the current individual plan families. Their hardware-d
 
 ## When does the five-day evaluation period start?
 
-It starts after Google authentication, when the server confirms that the account and device are eligible and creates the evaluation entitlement during the first license validation. Opening the sign-in window or clicking a button does not start it by itself. The available feature set follows the effective plan in the signed entitlement; the app does not widen access when a valid plan is absent.
+For an eligible first-time user, it starts with MacBaram's first successful license check after Google sign-in. Opening the sign-in window or clicking a button does not start it by itself. The available feature set follows the effective plan in the validated signed license; the app does not widen access when a valid plan is absent.
 
 ## How do normal purchase, Supporter access, and Creator Access differ?
 
-A normal purchase uses the paid entitlement confirmed by the payment provider and does not require a complimentary access code. Supporter complimentary access is for an approved Supporter's own account. Creator Access is the separate 365-day opportunity granted to an approved Creator Sponsorship applicant. A Supporter recommendation connection is not an entitlement, discount, or code redemption; it only distinguishes a later eligible normal paid purchase for attribution. These purposes are not interchangeable.
+A normal purchase uses confirmed paid access and does not require a complimentary access code. Supporter complimentary access is for an approved Supporter's own account. Creator Access is the separate 365-day opportunity granted to an approved Creator Sponsorship applicant. A Supporter recommendation connection is not product access, a discount, or code redemption; it only distinguishes a later eligible normal paid purchase for attribution. These purposes are not interchangeable.
 
 ## Where are Creator Sponsorship and Supporters described?
 

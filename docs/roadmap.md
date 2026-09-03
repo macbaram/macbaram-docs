@@ -26,7 +26,7 @@ Feedback is not payment or an obligation. MacBaram aims to listen to creators wh
 
 Supporters is a separate early referral collaboration. The approved target condition is a 20% commission on eligible attributed purchases recommended by an approved Supporter; it is not a current payout guarantee. A complimentary access benefit for the Supporter's own account is separate from another customer's referral purchase.
 
-A Supporter recommendation connection is not an entitlement, discount, or access-code redemption. Its only approved purpose is to distinguish a later eligible normal paid purchase for attribution, while the complimentary access for the Supporter's own account remains a separate benefit.
+A Supporter recommendation connection is not product access, a discount, or access-code redemption. Its only approved purpose is to distinguish a later eligible normal paid purchase for attribution, while the complimentary access for the Supporter's own account remains a separate benefit.
 
 The official website may keep an EARLY PROGRAM description and accept individual inquiries. Referral and renewal attribution, refund and dispute exclusions, settlement, and payout still require verified end-to-end operation; an inquiry path is not evidence that these mechanisms are active.
 
