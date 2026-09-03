@@ -42,9 +42,16 @@
     {
       "id": "low-battery-sleep-return",
       "status": "available",
-      "summary": "At the user-selected low-battery threshold, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur.",
-      "verified_on": "2026-09-02",
-      "source_url": "https://www.macbaram.com/"
+      "summary": "After a brief adapter-disconnect grace period, MacBaram can stop Stay Awake and Virtual Clamshell at the user-selected low-battery threshold, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep to occur. Saved choices can be considered again after external power returns or the battery recovers, but only when the current authorization still allows them.",
+      "reapply_conditions": [
+        "external_power_restored",
+        "battery_recovered"
+      ],
+      "authorization_required_for_reapply": true,
+      "work_completion_guaranteed": false,
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/guides/battery-aware-sleep-prevention/"
     },
     {
       "id": "heat-protection",
@@ -86,7 +93,13 @@
     {
       "id": "license-access-source-boundary",
       "status": "available",
-      "summary": "Normal purchase access, Supporter complimentary access, and Creator Access are distinct; a Supporter recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
+      "summary": "Normal purchase uses Creem-confirmed paid access without a complimentary code. A complimentary code creates one account-bound access grant for its selected plan and period. Supporter complimentary access, Creator Access, and a Supporter recommendation connection remain distinct; the recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
+      "paid_origin": "Creem",
+      "paid_code_required": false,
+      "complimentary_grant_count_per_code": 1,
+      "complimentary_account_bound": true,
+      "grant_plan_and_period_explicit": true,
+      "supporter_affiliate_is_entitlement": false,
       "source_evidence": "verified",
       "verified_on": "2026-09-03",
       "source_url": "https://www.macbaram.com/"
@@ -143,9 +156,17 @@
     {
       "id": "control-interlocks",
       "status": "available",
-      "summary": "MacBaram keeps a control unavailable or returns supported behavior toward macOS defaults when required public-safe hardware, temperature, power, or session conditions are not satisfied.",
-      "verified_on": "2026-09-02",
-      "source_url": "https://www.macbaram.com/"
+      "summary": "MacBaram keeps a control unavailable or returns supported behavior toward macOS defaults when required public-safe hardware, temperature, power, or session conditions are not satisfied. An authorization-related return is complete only after the supported state is verified; affected optional controls remain unavailable while that return is incomplete, and a pending entitlement-restriction return can make another supported attempt. Repository evidence does not establish the installed release's physical outcome, which requires separate installation and device-state readback evidence.",
+      "authorization_return_requires_state_verification": true,
+      "affected_controls_available_while_return_pending": false,
+      "entitlement_restriction_return_retryable": true,
+      "physical_release_evidence_required": true,
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+      "supporting_source_urls": [
+        "https://www.macbaram.com/"
+      ]
     },
     {
       "id": "workload-auto-detection",

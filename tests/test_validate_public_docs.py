@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import shutil
 import tempfile
 import unittest
@@ -66,6 +67,24 @@ class ForbiddenContentTests(unittest.TestCase):
                 "If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion."
             ),
             set(),
+        )
+
+    def test_reusable_complimentary_code_claim_is_rejected(self) -> None:
+        self.assertIn(
+            "reusable complimentary code claim",
+            self.labels("The same code can be used for multiple accounts."),
+        )
+
+    def test_unauthorized_reapplication_claim_is_rejected(self) -> None:
+        self.assertIn(
+            "unauthorized reapplication claim",
+            self.labels("Saved controls can be reapplied without current authorization."),
+        )
+
+    def test_unverified_restore_success_claim_is_rejected(self) -> None:
+        self.assertIn(
+            "unverified restore success claim",
+            self.labels("A return is considered complete without state verification."),
         )
 
 
@@ -142,6 +161,129 @@ class StatusBoundaryTests(unittest.TestCase):
             finally:
                 VALIDATOR.ROOT = original_root
         self.assertTrue(any("missing canonical baseline meaning" in error for error in errors))
+
+    def assert_missing_baseline_phrase(self, relative: str, phrase: str) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            path = mutated_root / relative
+            path.write_text(path.read_text(encoding="utf-8").replace(phrase, "removed contract"), encoding="utf-8")
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_canonical_baseline(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertTrue(any(f"{relative}: missing canonical baseline meaning" in error for error in errors))
+
+    def test_missing_safe_return_retry_boundary_fails(self) -> None:
+        self.assert_missing_baseline_phrase(
+            "docs/control-session-lifecycle.md",
+            "a pending entitlement-restriction return can make another supported attempt",
+        )
+
+    def test_missing_paid_and_complimentary_access_contract_fails(self) -> None:
+        self.assert_missing_baseline_phrase("docs/faq.md", "Creem-confirmed paid access")
+
+    def test_missing_adapter_grace_and_reapply_authority_fails(self) -> None:
+        self.assert_missing_baseline_phrase(
+            "docs/battery-aware-sleep.md",
+            "When external power returns or the battery recovers above the separate recovery boundary",
+        )
+
+    def assert_missing_public_fact_summary_phrase(self, fact_id: str, phrase: str) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            facts_path = mutated_root / "data/public-facts.json"
+            facts_path.write_text(
+                facts_path.read_text(encoding="utf-8").replace(phrase, "removed contract"),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_public_facts(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertIn(f"public fact {fact_id} summary must state: {phrase}", errors)
+
+    def test_public_facts_preserve_safe_return_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "control-interlocks",
+            "pending entitlement-restriction return can make another supported attempt",
+        )
+
+    def test_public_facts_preserve_access_source_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "license-access-source-boundary",
+            "Creem-confirmed paid access without a complimentary code",
+        )
+
+    def test_public_facts_preserve_low_battery_reapply_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "low-battery-sleep-return",
+            "after external power returns or the battery recovers",
+        )
+
+    def assert_public_fact_contradiction_fails(self, fact_id: str, contradiction: str) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            facts_path = mutated_root / "data/public-facts.json"
+            payload = json.loads(facts_path.read_text(encoding="utf-8"))
+            fact = next(item for item in payload["facts"] if item["id"] == fact_id)
+            fact["summary"] += f" {contradiction}"
+            facts_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_content(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertTrue(any("claim" in error for error in errors))
+
+    def test_reusable_code_contradiction_fails(self) -> None:
+        self.assert_public_fact_contradiction_fails(
+            "license-access-source-boundary",
+            "The same code can be used for multiple accounts.",
+        )
+
+    def test_unauthorized_reapplication_contradiction_fails(self) -> None:
+        self.assert_public_fact_contradiction_fails(
+            "low-battery-sleep-return",
+            "Saved controls can be reapplied without current authorization.",
+        )
+
+    def test_unverified_restore_success_contradiction_fails(self) -> None:
+        self.assert_public_fact_contradiction_fails(
+            "control-interlocks",
+            "A return is considered complete without state verification.",
+        )
+
+    def test_structured_access_boundary_is_required(self) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            facts_path = mutated_root / "data/public-facts.json"
+            payload = json.loads(facts_path.read_text(encoding="utf-8"))
+            fact = next(item for item in payload["facts"] if item["id"] == "license-access-source-boundary")
+            fact["complimentary_account_bound"] = False
+            facts_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_public_facts(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertIn(
+            "public fact license-access-source-boundary complimentary_account_bound must be True",
+            errors,
+        )
 
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
@@ -263,6 +405,12 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             }
         }
 
+    def test_every_summary_contract_has_a_live_source_guard(self) -> None:
+        self.assertEqual(
+            set(VALIDATOR.PUBLIC_FACT_SUMMARY_REQUIREMENTS) - set(VALIDATOR.LIVE_SOURCE_REQUIREMENTS),
+            set(),
+        )
+
     def test_visible_minimum_macos_copy_passes(self) -> None:
         errors: list[str] = []
         VALIDATOR.validate_live_source_evidence(
@@ -337,8 +485,10 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             "For an eligible first-time user, the 5-day period begins at the first successful license check "
             "after Google sign-in. Opening sign-in or clicking a button does not start it. The effective plan "
             "comes from a validated signed license, and the app does not widen access without a valid plan. "
-            "Normal purchase provides access without a complimentary access code. Supporter complimentary "
-            "access is for the Supporter's own account. Creator Access is a separate 365-day opportunity. "
+            "A normal purchase is processed by Creem and grants access without a complimentary access code. "
+            "Supporter complimentary access uses a one-time code bound to the approved Supporter's own account and "
+            "states the approved plan and duration. Creator Access uses a one-time, account-bound 365-day code for "
+            "the selected plan. "
             "A Supporter recommendation connection is not product access, a discount, or code redemption."
         )
         errors: list[str] = []
@@ -362,6 +512,107 @@ class LiveSourceEvidenceTests(unittest.TestCase):
         VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: partial_source)
         for fact_id in facts:
             self.assertTrue(any(fact_id in error for error in errors))
+
+    def test_new_public_fact_cannot_use_its_own_summary_as_live_proof(self) -> None:
+        fact = {
+            "license-access-source-boundary": {
+                "id": "license-access-source-boundary",
+                "source_url": "https://www.macbaram.com/",
+                "source_evidence": "verified",
+                "summary": (
+                    "Normal purchase uses Creem-confirmed paid access without a complimentary access code. "
+                    "A complimentary code creates one account-bound access grant for its selected plan and period."
+                ),
+            }
+        }
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            fact,
+            fetch=lambda _url: "<main>Normal purchase grants access without a complimentary access code.</main>",
+        )
+        self.assertTrue(any("license-access-source-boundary source body must state" in error for error in errors))
+
+    def test_new_public_safe_source_contracts_can_pass(self) -> None:
+        facts = {
+            "license-access-source-boundary": {
+                "id": "license-access-source-boundary",
+                "source_url": "https://www.macbaram.com/",
+            },
+            "low-battery-sleep-return": {
+                "id": "low-battery-sleep-return",
+                "source_url": "https://www.macbaram.com/guides/battery-aware-sleep-prevention/",
+            },
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            },
+        }
+        license_source = (
+            "A normal purchase is processed by Creem and grants access without a complimentary access code. "
+            "Supporter complimentary access uses a one-time code bound to the approved Supporter's own account and states the approved plan and duration. "
+            "Creator Access uses a one-time, account-bound 365-day code for the selected plan. "
+            "A Supporter recommendation connection is not product access, a discount, or code redemption."
+        )
+        low_battery_source = (
+            "After a brief adapter-disconnect grace period, saved choices may return when external power returns or the "
+            "battery recovers, but only when the current product access still permits that control."
+        )
+        control_source = (
+            "Sending a restore command "
+            "is not enough to call the return complete. When product access becomes restricted, MacBaram keeps the affected "
+            "selected control unavailable until state readback and may retry a supported return. This does not mean that "
+            "every manual or automatic ending path retries until it is verified."
+        )
+        errors: list[str] = []
+        supporting_source = (
+            "A successful restore command alone does not verify that the physical state was restored. "
+            "MacBaram checks available state readback, and physical-release evidence remains separate from source or build checks."
+        )
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            facts,
+            fetch=lambda url: {
+                "https://www.macbaram.com/": f"{license_source} {supporting_source}",
+                "https://www.macbaram.com/guides/battery-aware-sleep-prevention/": low_battery_source,
+                "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/": control_source,
+            }[url],
+        )
+        self.assertEqual(errors, [])
+
+    def test_control_interlock_missing_supporting_source_fails(self) -> None:
+        facts = {
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            }
+        }
+        primary = (
+            "Sending a restore command is not enough to call the return complete. When product access becomes restricted, "
+            "MacBaram keeps the affected selected control unavailable until state readback and may retry a supported return. "
+            "This does not mean that every manual or automatic ending path retries until it is verified."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: primary)
+        self.assertTrue(any("supporting source body must state" in error for error in errors))
+
+    def test_control_interlock_missing_primary_source_fails(self) -> None:
+        facts = {
+            "control-interlocks": {
+                "id": "control-interlocks",
+                "source_url": "https://www.macbaram.com/guides/a-mac-control-session-needs-an-ending/",
+                "supporting_source_urls": ["https://www.macbaram.com/"],
+            }
+        }
+        supporting = (
+            "A successful restore command alone does not verify that the physical state was restored. "
+            "MacBaram checks available state readback, and physical-release evidence remains separate from source or build checks."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: supporting)
+        self.assertTrue(any("source body must state the public-safe authorization return" in error for error in errors))
 
 
 class ControlSessionLifecycleTests(unittest.TestCase):

@@ -22,14 +22,14 @@ Machine-readable facts: data/public-facts.json
 - Current controls include supported fan curves, charging limits, Power-Only, Safety Drain, Heat Protection, sleep prevention, separate physical-display behavior, Virtual Clamshell, low-battery return toward normal macOS sleep, and a unified dashboard.
 - Virtual Clamshell is a current core feature on supported Apple silicon MacBooks. The built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor. It does not bypass login, lock, application permission, or remote-tool authorization.
 - Heat Protection can coordinate a supported charging pause and an available fan response from the same battery-temperature condition, then restore the active fan policy after cooling.
-- At the user-selected low-battery threshold, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. It does not guarantee that a workload has saved or completed its work.
+- After a brief adapter-disconnect grace period, MacBaram can stop Stay Awake and Virtual Clamshell at the user-selected low-battery threshold, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep to occur. Saved choices can be considered again after external power returns or the battery recovers, but only when the current authorization still allows them. This does not guarantee that a workload has saved or completed its work.
 - Fan curves use measured temperature feedback. Public-safe hardware, temperature, power, and session conditions can keep a control unavailable or return supported behavior toward macOS defaults.
 
 ## Workload boundary
 
 MacBaram can manage supported Mac operating conditions around local AI, builds and tests, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote sessions. Examples include Ollama, LM Studio, Final Cut Pro, Blender, Xcode, Claude Code, and Docker, but MacBaram does not operate those applications.
 
-Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch settings by workload. Users choose controls and presets themselves. Workload-aware assistance belongs to the Enterprise Single roadmap; it is not a current plan or feature. Enterprise Fleet is also a roadmap direction, not a current plan.
+Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch settings by workload. Users choose controls and presets themselves. Workload-aware assistance belongs to the Enterprise Single roadmap; it is not a current plan or feature. A roadmap name, preview, or preparatory entry does not make it current. Enterprise Fleet is also a roadmap direction, not a current plan.
 
 ## Creator Sponsorship and Supporters
 
@@ -37,7 +37,7 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 - Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Selection is individual, not automatic.
 - Voluntary feedback about product shortcomings and improvement ideas can inform product development as MacBaram grows with creators; feedback is not an obligation, and no implementation or schedule is promised.
 - Creator Sponsorship is separate from Supporters. Supporters is an early referral program; referral tracking and payout are not guaranteed until the full operating flow is verified end to end.
-- Normal purchase, Supporter complimentary access, and Creator Access have different purposes. Normal purchase uses confirmed paid access without a complimentary access code. Supporter complimentary access is for the approved Supporter's own account, while Creator Access is the separate 365-day opportunity for an approved creator.
+- Normal purchase, Supporter complimentary access, and Creator Access have different purposes. Normal purchase uses Creem-confirmed paid access without a complimentary access code. A complimentary code creates one account-bound access grant for its selected plan and period. Supporter complimentary access is for the approved Supporter's own account, while Creator Access is the separate 365-day opportunity for the selected plan for an approved creator.
 - A Supporter recommendation connection is not product access, a discount, or access-code redemption. It only distinguishes a later eligible normal paid purchase for attribution, and remains subject to the unverified operating boundary above.
 
 ## Five-day evaluation boundary
@@ -48,4 +48,4 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 
 ## Safety and citation boundary
 
-MacBaram does not promise a specific performance increase, throttling outcome, battery-lifespan result, uninterrupted workload, or protection against every hardware failure. Use the official website and guides for current commercial and workflow information. This repository is a reviewed public projection and must not be used to infer private algorithms, control thresholds, hardware keys, licensing behavior, or internal recovery sequencing.
+MacBaram does not promise a specific performance increase, throttling outcome, battery-lifespan result, uninterrupted workload, or protection against every hardware failure. An authorization-related return is complete only after the supported state is verified; affected optional controls remain unavailable while that return is incomplete, and a pending entitlement-restriction return can make another supported attempt. Repository tests and documentation review do not establish the installed release's final state on a physical Mac; that physical outcome requires separate installation and device-state readback evidence. Use the official website and guides for current commercial and workflow information. This repository is a reviewed public projection and must not be used to infer private algorithms, control thresholds, hardware keys, licensing behavior, or internal recovery sequencing.
