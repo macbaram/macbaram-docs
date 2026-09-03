@@ -77,6 +77,9 @@ EXPECTED_FACT_STATUSES = {
     "heat-protection": "available",
     "virtual-clamshell": "available",
     "individual-plan-lineup": "available",
+    "korean-name-origin": "available",
+    "five-day-evaluation-start": "available",
+    "license-access-source-boundary": "available",
     "creator-sponsorship-application": "available",
     "supporters-referral-operation": "concept",
     "power-only": "available",
@@ -91,6 +94,26 @@ EXPECTED_FACT_STATUSES = {
     "unified-dashboard": "available",
     "intel-mac": "unsupported",
     "imac": "unsupported",
+}
+CANONICAL_BASELINE_PHRASES = {
+    Path("README.md"): (
+        "Baram` (`바람`) means wind in Korean",
+        "not a claim of technical superiority, safety, or guaranteed results",
+    ),
+    Path("docs/faq.md"): (
+        "first successful license check after Google sign-in",
+        "The available feature set follows the effective plan in the validated signed license",
+        "A Supporter recommendation connection is not product access, a discount, or code redemption",
+    ),
+    Path("docs/roadmap.md"): (
+        "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
+        "complimentary access for the Supporter's own account remains a separate benefit",
+    ),
+    Path("llms.txt"): (
+        "Baram (`바람`) means wind in Korean",
+        "first successful license check after Google sign-in",
+        "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
+    ),
 }
 ROADMAP_ONLY_TERMS = {
     "Enterprise Single",
@@ -122,6 +145,38 @@ LIVE_SOURCE_REQUIREMENTS = {
             re.I,
         ),
         "the current Creator application, 365-day access, no-obligation contract, and editorial independence",
+    ),
+    "korean-name-origin": (
+        re.compile(
+            r"(?=.*\bBaram\b.*\bwind\b.*\bKorean\b)"
+            r"(?=.*\b(?:made|developed) in Korea\b)"
+            r"(?=.*\bnot\b.*\btechnical superiority\b)"
+            r"(?=.*\bnot\b.*\bsafety\b)"
+            r"(?=.*\bnot\b.*\bguaranteed results?\b)",
+            re.I,
+        ),
+        "the Korean name and product-origin identity without superiority, safety, or result guarantees",
+    ),
+    "five-day-evaluation-start": (
+        re.compile(
+            r"(?=.*\b5-day\b)"
+            r"(?=.*\bfirst (?:successful )?license check\b.*\bGoogle sign-in\b)"
+            r"(?=.*\b(?:opening (?:the )?sign-in|clicking a button)\b.*\bdoes not start\b)"
+            r"(?=.*\beffective (?:plan|tier)\b.*\b(?:validated )?signed (?:license|entitlement)\b)"
+            r"(?=.*\bdoes not widen access\b.*\bvalid (?:plan|tier)\b)",
+            re.I,
+        ),
+        "the complete five-day start event and signed effective-plan boundary",
+    ),
+    "license-access-source-boundary": (
+        re.compile(
+            r"(?=.*\bnormal purchase\b.*\bwithout a complimentary access code\b)"
+            r"(?=.*\bSupporter complimentary access\b.*\bown account\b)"
+            r"(?=.*\bCreator Access\b.*\b365-day\b)"
+            r"(?=.*\bSupporter recommendation connection\b.*\bnot product access\b.*\bdiscount\b.*\bcode redemption\b)",
+            re.I,
+        ),
+        "the separate paid, Supporter, Creator, and recommendation-attribution access boundaries",
     ),
 }
 PROMOTION_PATTERNS = (
@@ -179,7 +234,7 @@ def validate_public_facts(errors: list[str]) -> dict[str, dict[str, object]]:
     facts_by_id: dict[str, dict[str, object]] = {}
     for index, fact in enumerate(data.get("facts", [])):
         prefix = f"facts[{index}]"
-        required = {"id", "status", "summary", "verified_on", "source_url"}
+        required = {"id", "status", "summary", "source_url"}
         missing = required - set(fact)
         if missing:
             fail(errors, f"{prefix} missing fields: {', '.join(sorted(missing))}")
@@ -190,7 +245,13 @@ def validate_public_facts(errors: list[str]) -> dict[str, dict[str, object]]:
         facts_by_id[fact["id"]] = fact
         if fact["status"] not in ALLOWED_STATUSES:
             fail(errors, f"{prefix} has invalid status: {fact['status']}")
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", fact["verified_on"]):
+        source_evidence = fact.get("source_evidence", "verified")
+        if source_evidence not in {"verified", "pending"}:
+            fail(errors, f"{prefix} source_evidence must be verified or pending")
+        if source_evidence == "pending":
+            if "verified_on" in fact:
+                fail(errors, f"{prefix} pending source evidence must not have verified_on")
+        elif not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(fact.get("verified_on", ""))):
             fail(errors, f"{prefix} verified_on must be YYYY-MM-DD")
         parsed = urlparse(fact["source_url"])
         if parsed.scheme != "https" or parsed.netloc != OFFICIAL_ORIGIN:
@@ -241,6 +302,8 @@ def validate_live_source_evidence(
             continue
         if not pattern.search(source_text):
             fail(errors, f"public fact {fact_id} source body must state {description}: {source_url}")
+        elif fact.get("source_evidence") == "pending":
+            fail(errors, f"public fact {fact_id} source now matches but source_evidence is still pending")
 
 
 def validate_fact_status_contract(
@@ -277,6 +340,14 @@ def validate_content(errors: list[str]) -> None:
         for url in re.findall(r"https?://[^\s)>\]`]+", content):
             if ".pkg" in url.lower():
                 fail(errors, f"{relative}: package URLs are not public documentation links")
+
+
+def validate_canonical_baseline(errors: list[str]) -> None:
+    for relative, phrases in CANONICAL_BASELINE_PHRASES.items():
+        content = (ROOT / relative).read_text(encoding="utf-8")
+        for phrase in phrases:
+            if phrase not in content:
+                fail(errors, f"{relative}: missing canonical baseline meaning: {phrase}")
 
 
 def validate_roadmap_boundaries(errors: list[str]) -> None:
@@ -448,6 +519,7 @@ def main() -> int:
     if args.check_live_sources:
         validate_live_source_evidence(errors, facts_by_id)
     validate_content(errors)
+    validate_canonical_baseline(errors)
     validate_roadmap_boundaries(errors)
     validate_control_session_lifecycle(errors)
     validate_relative_links(errors)

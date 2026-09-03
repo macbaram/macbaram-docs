@@ -68,6 +68,30 @@
       "source_url": "https://www.macbaram.com/"
     },
     {
+      "id": "korean-name-origin",
+      "status": "available",
+      "summary": "Baram means wind in Korean; the name preserves MacBaram's identity as a product made in Korea and its interest in Mac heat and airflow, without claiming technical superiority, safety, or guaranteed results.",
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "five-day-evaluation-start",
+      "status": "available",
+      "summary": "For an eligible first-time user, the five-day evaluation period starts with MacBaram's first successful license check after Google sign-in; opening sign-in or clicking a button does not start it, and available features follow the effective plan in the validated signed license.",
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
+      "id": "license-access-source-boundary",
+      "status": "available",
+      "summary": "Normal purchase access, Supporter complimentary access, and Creator Access are distinct; a Supporter recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
+      "source_evidence": "verified",
+      "verified_on": "2026-09-03",
+      "source_url": "https://www.macbaram.com/"
+    },
+    {
       "id": "creator-sponsorship-application",
       "status": "available",
       "summary": "Creator Sponsorship applications are open for creators with public activity: applicants provide a public activity URL, their Mac and Apple chip, the requested Air, Desktop, or Pro plan, and the intended use; approved applicants receive one 365-day access code without any required review, positive rating, purchase, or product feedback, and MacBaram does not interfere with the content or conclusion of a review a creator chooses to publish.",

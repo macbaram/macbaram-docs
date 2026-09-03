@@ -105,6 +105,9 @@ class StatusBoundaryTests(unittest.TestCase):
             "safety-drain": "available",
             "heat-protection": "available",
             "individual-plan-lineup": "available",
+            "korean-name-origin": "available",
+            "five-day-evaluation-start": "available",
+            "license-access-source-boundary": "available",
             "creator-sponsorship-application": "available",
             "supporters-referral-operation": "concept",
             "workload-auto-detection": "roadmap",
@@ -113,6 +116,32 @@ class StatusBoundaryTests(unittest.TestCase):
         }
         for fact_id, status in required.items():
             self.assertEqual(VALIDATOR.EXPECTED_FACT_STATUSES[fact_id], status)
+
+    def test_canonical_baseline_meanings_are_required(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_canonical_baseline(errors)
+        self.assertEqual(errors, [])
+
+    def test_missing_evaluation_start_boundary_fails(self) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            faq_path = mutated_root / "docs/faq.md"
+            faq_path.write_text(
+                faq_path.read_text(encoding="utf-8").replace(
+                    "first successful license check after Google sign-in",
+                    "starts after installation",
+                ),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors = []
+                VALIDATOR.validate_canonical_baseline(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertTrue(any("missing canonical baseline meaning" in error for error in errors))
 
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
@@ -292,6 +321,47 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             ),
         )
         self.assertTrue(any("current Creator application" in error for error in errors))
+
+    def test_new_canonical_facts_require_their_complete_public_meaning(self) -> None:
+        facts = {
+            fact_id: {"id": fact_id, "source_url": "https://www.macbaram.com/"}
+            for fact_id in (
+                "korean-name-origin",
+                "five-day-evaluation-start",
+                "license-access-source-boundary",
+            )
+        }
+        source = (
+            "Baram means wind in Korean. MacBaram is made in Korea. This origin is not a claim of "
+            "technical superiority, is not a safety claim, and is not a promise of guaranteed results. "
+            "For an eligible first-time user, the 5-day period begins at the first successful license check "
+            "after Google sign-in. Opening sign-in or clicking a button does not start it. The effective plan "
+            "comes from a validated signed license, and the app does not widen access without a valid plan. "
+            "Normal purchase provides access without a complimentary access code. Supporter complimentary "
+            "access is for the Supporter's own account. Creator Access is a separate 365-day opportunity. "
+            "A Supporter recommendation connection is not product access, a discount, or code redemption."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: source)
+        self.assertEqual(errors, [])
+
+    def test_partial_public_copy_does_not_false_pass_new_facts(self) -> None:
+        facts = {
+            fact_id: {"id": fact_id, "source_url": "https://www.macbaram.com/"}
+            for fact_id in (
+                "korean-name-origin",
+                "five-day-evaluation-start",
+                "license-access-source-boundary",
+            )
+        }
+        partial_source = (
+            "Baram means wind in Korean. The 5-day period begins at the first license check after Google sign-in. "
+            "Creator Sponsorship and Supporters are separate."
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(errors, facts, fetch=lambda _url: partial_source)
+        for fact_id in facts:
+            self.assertTrue(any(fact_id in error for error in errors))
 
 
 class ControlSessionLifecycleTests(unittest.TestCase):
