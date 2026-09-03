@@ -77,6 +77,9 @@ EXPECTED_FACT_STATUSES = {
     "heat-protection": "available",
     "virtual-clamshell": "available",
     "individual-plan-lineup": "available",
+    "korean-name-origin": "available",
+    "five-day-evaluation-start": "available",
+    "license-access-source-boundary": "available",
     "creator-sponsorship-application": "available",
     "supporters-referral-operation": "concept",
     "power-only": "available",
@@ -91,6 +94,26 @@ EXPECTED_FACT_STATUSES = {
     "unified-dashboard": "available",
     "intel-mac": "unsupported",
     "imac": "unsupported",
+}
+CANONICAL_BASELINE_PHRASES = {
+    Path("README.md"): (
+        "Baram` (`바람`) means wind in Korean",
+        "not a claim of technical superiority, safety, or guaranteed results",
+    ),
+    Path("docs/faq.md"): (
+        "creates the evaluation entitlement during the first license validation",
+        "The available feature set follows the effective plan in the signed entitlement",
+        "A Supporter recommendation connection is not an entitlement, discount, or code redemption",
+    ),
+    Path("docs/roadmap.md"): (
+        "A Supporter recommendation connection is not an entitlement, discount, or access-code redemption",
+        "complimentary access for the Supporter's own account remains a separate benefit",
+    ),
+    Path("llms.txt"): (
+        "Baram (`바람`) means wind in Korean",
+        "creates the evaluation entitlement during the first license validation",
+        "A Supporter recommendation connection is not an entitlement, discount, or access-code redemption",
+    ),
 }
 ROADMAP_ONLY_TERMS = {
     "Enterprise Single",
@@ -279,6 +302,14 @@ def validate_content(errors: list[str]) -> None:
                 fail(errors, f"{relative}: package URLs are not public documentation links")
 
 
+def validate_canonical_baseline(errors: list[str]) -> None:
+    for relative, phrases in CANONICAL_BASELINE_PHRASES.items():
+        content = (ROOT / relative).read_text(encoding="utf-8")
+        for phrase in phrases:
+            if phrase not in content:
+                fail(errors, f"{relative}: missing canonical baseline meaning: {phrase}")
+
+
 def validate_roadmap_boundaries(errors: list[str]) -> None:
     roadmap = (ROOT / "docs/roadmap.md").read_text(encoding="utf-8")
     if "Nothing on this page makes an Enterprise product direction or a Supporters referral operation" not in roadmap:
@@ -448,6 +479,7 @@ def main() -> int:
     if args.check_live_sources:
         validate_live_source_evidence(errors, facts_by_id)
     validate_content(errors)
+    validate_canonical_baseline(errors)
     validate_roadmap_boundaries(errors)
     validate_control_session_lifecycle(errors)
     validate_relative_links(errors)

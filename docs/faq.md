@@ -16,6 +16,10 @@ No. Apple silicon and macOS 13 or later are required.
 
 iMac support is not currently declared. When the required capability is not verified, MacBaram keeps the affected control unavailable.
 
+## What does Baram mean?
+
+`Baram` (`바람`) means wind in Korean. The name reflects MacBaram's origin as a product made in Korea and its focus on heat and airflow inside the Mac. It does not claim technical superiority, safety, or a guaranteed result.
+
 ## Will MacBaram always improve performance or extend battery life?
 
 No. MacBaram provides controls and visibility. Results depend on the Mac, workload, environment, settings, and macOS behavior.
@@ -27,6 +31,14 @@ Pricing, trial terms, and availability are commercial information maintained on 
 ## Which plans are current?
 
 Air, Desktop, and Pro are the current individual plan families. Their hardware-dependent fan, battery, and sleep/display combinations are explained on the official website. Enterprise plans are roadmap directions, not currently available product plans; see [Roadmap and collaboration programs](roadmap.md).
+
+## When does the five-day evaluation period start?
+
+It starts after Google authentication, when the server confirms that the account and device are eligible and creates the evaluation entitlement during the first license validation. Opening the sign-in window or clicking a button does not start it by itself. The available feature set follows the effective plan in the signed entitlement; the app does not widen access when a valid plan is absent.
+
+## How do normal purchase, Supporter access, and Creator Access differ?
+
+A normal purchase uses the paid entitlement confirmed by the payment provider and does not require a complimentary access code. Supporter complimentary access is for an approved Supporter's own account. Creator Access is the separate 365-day opportunity granted to an approved Creator Sponsorship applicant. A Supporter recommendation connection is not an entitlement, discount, or code redemption; it only distinguishes a later eligible normal paid purchase for attribution. These purposes are not interchangeable.
 
 ## Where are Creator Sponsorship and Supporters described?
 

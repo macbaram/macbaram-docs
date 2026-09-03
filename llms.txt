@@ -2,6 +2,8 @@
 
 MacBaram is a native, closed-source macOS utility that coordinates supported fan, battery, power, display, and sleep controls around long-running work. It is not merely a bundle of separate utilities and it does not operate or optimize the workload application itself.
 
+Baram (`바람`) means wind in Korean. The name preserves MacBaram's identity as a product made in Korea and its interest in Mac heat and airflow. It does not claim technical superiority, safety, or guaranteed results.
+
 Canonical website: https://www.macbaram.com/
 Canonical download: https://www.macbaram.com/download
 Official guides: https://www.macbaram.com/guides/
@@ -35,6 +37,14 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 - Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Selection is individual, not automatic.
 - Voluntary feedback about product shortcomings and improvement ideas can inform product development as MacBaram grows with creators; feedback is not an obligation, and no implementation or schedule is promised.
 - Creator Sponsorship is separate from Supporters. Supporters is an early referral program; referral tracking and payout are not guaranteed until the full operating flow is verified end to end.
+- Normal purchase, Supporter complimentary access, and Creator Access have different purposes. Normal purchase uses a confirmed paid entitlement without a complimentary access code. Supporter complimentary access is for the approved Supporter's own account, while Creator Access is the separate 365-day opportunity for an approved creator.
+- A Supporter recommendation connection is not an entitlement, discount, or access-code redemption. It only distinguishes a later eligible normal paid purchase for attribution, and remains subject to the unverified operating boundary above.
+
+## Five-day evaluation boundary
+
+- The five-day evaluation period starts after Google authentication, when the server confirms account and device eligibility and creates the evaluation entitlement during the first license validation.
+- Opening the sign-in window or clicking a button does not start the period by itself.
+- Available features follow the effective plan in the signed entitlement. The app does not widen access when a valid plan is absent.
 
 ## Safety and citation boundary
 

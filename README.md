@@ -13,7 +13,7 @@
   <a href="CHANGELOG.md">Update Notes</a>
 </p>
 
-MacBaram is a native macOS utility for demanding work that runs for hours. Local AI, development, build and test jobs, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote work can keep a Mac busy while temperature, fan response, charging, the display, and sleep change. MacBaram is not merely a collection of separate utilities: it treats the supported controls around that work as one coordinated operating state.
+MacBaram is a native macOS utility for work that needs time, including local AI, development, builds and tests, photo processing, video and 3D rendering, backups, large downloads, automation, and already-connected remote work. It treats supported temperature, fan, charging, display, and sleep controls as one coordinated operating state rather than a collection of unrelated utilities.
 
 This repository is MacBaram's public technical knowledge base, not its source code or installer channel. It contains reviewed product explanations, compatibility boundaries, support guidance, and public update notes.
 
@@ -23,9 +23,11 @@ _The dashboard presents verified controls and state for the current Mac. Hardwar
 
 ## Why MacBaram exists
 
-A long-running job does not happen in a single, fixed system state. Temperature and fan response change with load. A portable Mac may remain connected to power and fully charged for a long period. A job can also stop when macOS goes to sleep.
+`Baram` (`바람`) means wind in Korean. The name preserves MacBaram's identity as a product made in Korea and its interest in heat and airflow inside the Mac. This origin story is not a claim of technical superiority, safety, or guaranteed results.
 
-MacBaram gives supported Macs one place to manage these related conditions without presenting them as guaranteed performance improvements or guaranteed hardware protection. Feedback-based fan control responds to measured state, while public-safe capability, temperature, power, and session checks decide when an intervention is allowed and when MacBaram should return control toward macOS defaults. The app shows what it can control on the current Mac and keeps unsupported controls unavailable.
+A long-running job crosses changing system states: temperature and fan response shift with load, a portable Mac can stay connected and charged, and macOS sleep can stop the work.
+
+MacBaram manages these related conditions without guaranteeing performance or hardware protection. Feedback-based fan control responds to measured state. Public-safe capability, temperature, power, and session checks decide when intervention is allowed and when control should return toward macOS defaults. Unsupported controls remain unavailable.
 
 ## Available now
 

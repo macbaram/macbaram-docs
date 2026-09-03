@@ -11,7 +11,7 @@ An unreviewed GitHub change must never update the product website, installer man
 ## Ten rules
 
 1. Use `https://www.macbaram.com/download` as the only public installer link.
-2. Keep current pricing, trial terms, purchase options, and sales availability only on the official website.
+2. Keep current prices, purchase options, sales availability, and changeable evaluation offers only on the official website. An approved public explanation of when an evaluation entitlement starts and how its effective plan is bounded may be projected here without duplicating price or sales claims.
 3. Publish a binary changelog entry only after the corresponding build is available through the canonical download route and its public readback succeeds. Use a dated operational note for a material user-visible server-side or compatibility-policy change that has no new binary.
 4. Describe a feature as `available` only when it exists in the current public release, has been approved for public description, and has passed the required verification.
 5. Keep undisclosed plans, experiments, partial work, and approval-pending work out of the public repository. A CEO-approved public direction may appear in `docs/roadmap.md` when it states that it is not currently available. Add a matching machine-readable fact only after an official `macbaram.com` page directly supports that claim.

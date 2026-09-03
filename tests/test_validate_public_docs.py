@@ -105,6 +105,9 @@ class StatusBoundaryTests(unittest.TestCase):
             "safety-drain": "available",
             "heat-protection": "available",
             "individual-plan-lineup": "available",
+            "korean-name-origin": "available",
+            "five-day-evaluation-start": "available",
+            "license-access-source-boundary": "available",
             "creator-sponsorship-application": "available",
             "supporters-referral-operation": "concept",
             "workload-auto-detection": "roadmap",
@@ -113,6 +116,32 @@ class StatusBoundaryTests(unittest.TestCase):
         }
         for fact_id, status in required.items():
             self.assertEqual(VALIDATOR.EXPECTED_FACT_STATUSES[fact_id], status)
+
+    def test_canonical_baseline_meanings_are_required(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_canonical_baseline(errors)
+        self.assertEqual(errors, [])
+
+    def test_missing_evaluation_start_boundary_fails(self) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            faq_path = mutated_root / "docs/faq.md"
+            faq_path.write_text(
+                faq_path.read_text(encoding="utf-8").replace(
+                    "creates the evaluation entitlement during the first license validation",
+                    "starts after installation",
+                ),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors = []
+                VALIDATOR.validate_canonical_baseline(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertTrue(any("missing canonical baseline meaning" in error for error in errors))
 
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
