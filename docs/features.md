@@ -38,7 +38,7 @@ Virtual Clamshell does not bypass a lock, login, application permission, or remo
 
 ## Low-battery return to normal sleep
 
-The user can set a low-battery threshold for long-work protection. When that level is reached, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. This does not guarantee that an application has saved or completed its work.
+The user can set a low-battery threshold for long-work protection. After external power disappears, a brief grace period lets a momentary adapter transition settle before MacBaram evaluates that threshold. When the level is reached, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. Saved controls are considered for reapplication only after the recovery boundary is met and the current authorized control session and entitlement remain valid. This does not guarantee that an application has saved or completed its work.
 
 ## Coordinated long-running work
 

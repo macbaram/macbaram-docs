@@ -18,7 +18,7 @@ The fleet architecture, data boundary, retention, price, service level, and rele
 
 Creator Sponsorship applications are currently open for creators with public creator, blog, or community activity. Applicants provide a public activity URL, the Mac model and Apple chip they use, the requested Air, Desktop, or Pro plan, and how they plan to use it. Selection is confirmed individually after review; it is not automatic.
 
-Approved applicants receive one 365-day access code for the selected plan. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Creator Sponsorship is separate from the commission-based Supporters program.
+Approved applicants receive one 365-day access code for the selected plan. The code can be redeemed once and binds that plan and access period to the approved account that redeems it. No review, positive rating, purchase, or product feedback is required in return. If a creator chooses to publish a review, MacBaram does not interfere with its content or conclusion. Creator Sponsorship is separate from the commission-based Supporters program.
 
 Feedback is not payment or an obligation. MacBaram aims to listen to creators who voluntarily share product shortcomings and improvement ideas, consider that input in product development, and grow with creators. This does not promise that every suggestion will be implemented or scheduled.
 
@@ -26,7 +26,7 @@ Feedback is not payment or an obligation. MacBaram aims to listen to creators wh
 
 Supporters is a separate early referral collaboration. The approved target condition is a 20% commission on eligible attributed purchases recommended by an approved Supporter; it is not a current payout guarantee. A complimentary access benefit for the Supporter's own account is separate from another customer's referral purchase.
 
-A Supporter recommendation connection is not product access, a discount, or access-code redemption. Its only approved purpose is to distinguish a later eligible normal paid purchase for attribution, while the complimentary access for the Supporter's own account remains a separate benefit.
+A Supporter recommendation connection is not product access, a discount, or access-code redemption. Its only approved purpose is to distinguish a later eligible normal paid purchase for attribution, while the complimentary access for the Supporter's own account remains a separate benefit. Any approved complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it.
 
 The official website may keep an EARLY PROGRAM description and accept individual inquiries. Referral and renewal attribution, refund and dispute exclusions, settlement, and payout still require verified end-to-end operation; an inquiry path is not evidence that these mechanisms are active.
 

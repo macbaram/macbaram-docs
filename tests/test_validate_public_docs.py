@@ -143,6 +143,36 @@ class StatusBoundaryTests(unittest.TestCase):
                 VALIDATOR.ROOT = original_root
         self.assertTrue(any("missing canonical baseline meaning" in error for error in errors))
 
+    def assert_missing_baseline_phrase(self, relative: str, phrase: str) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            path = mutated_root / relative
+            path.write_text(path.read_text(encoding="utf-8").replace(phrase, "removed contract"), encoding="utf-8")
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_canonical_baseline(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertTrue(any(f"{relative}: missing canonical baseline meaning" in error for error in errors))
+
+    def test_missing_safe_return_retry_boundary_fails(self) -> None:
+        self.assert_missing_baseline_phrase(
+            "docs/control-session-lifecycle.md",
+            "safe return remains pending, the affected control remains fenced, and the supported restore path is retried",
+        )
+
+    def test_missing_paid_and_complimentary_access_contract_fails(self) -> None:
+        self.assert_missing_baseline_phrase("docs/faq.md", "confirmed Creem paid access")
+
+    def test_missing_adapter_grace_and_reapply_authority_fails(self) -> None:
+        self.assert_missing_baseline_phrase(
+            "docs/battery-aware-sleep.md",
+            "current authorized control session and entitlement remain valid",
+        )
+
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
         facts["enterprise-single"]["summary"] = "Enterprise Single is currently available."

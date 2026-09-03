@@ -30,9 +30,11 @@ Supported return paths include:
 
 - **User stop or disable:** MacBaram releases its temporary sleep and display controls and ends the related virtual-display session where applicable.
 - **Low battery after external power is unavailable:** at the battery cutoff selected by the user, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep.
-- **Lost trusted control or invalid authorization:** MacBaram returns the affected supported controls toward macOS defaults. A restore request is not treated as success unless the supported state can be read back; unverified mutation remains fenced rather than being presented as complete.
+- **Lost trusted control or invalid authorization:** MacBaram returns the affected supported controls toward macOS defaults. A restore request is not treated as success unless the supported state can be read back. Until that readback confirms the intended state, safe return remains pending, the affected control remains fenced, and the supported restore path is retried.
 
 These paths do not erase every saved preference, and they do not mean that every control exists on every Mac. Hardware capability, current power state, and authorization still decide what can be applied.
+
+Repository tests and documentation review do not establish the installed release's final state on a physical Mac. A physical release outcome requires separate installation and device-state readback evidence for the release being claimed.
 
 ## What the session does not know
 

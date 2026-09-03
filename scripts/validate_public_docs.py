@@ -104,15 +104,33 @@ CANONICAL_BASELINE_PHRASES = {
         "first successful license check after Google sign-in",
         "The available feature set follows the effective plan in the validated signed license",
         "A Supporter recommendation connection is not product access, a discount, or code redemption",
+        "confirmed Creem paid access",
+        "Every complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the account that redeems it",
+    ),
+    Path("docs/battery-aware-sleep.md"): (
+        "a brief grace period lets a momentary adapter transition settle",
+        "current authorized control session and entitlement remain valid",
+    ),
+    Path("docs/control-session-lifecycle.md"): (
+        "safe return remains pending, the affected control remains fenced, and the supported restore path is retried",
+        "physical release outcome requires separate installation and device-state readback evidence",
     ),
     Path("docs/roadmap.md"): (
         "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
         "complimentary access for the Supporter's own account remains a separate benefit",
+        "The code can be redeemed once and binds that plan and access period to the approved account that redeems it",
+        "Any approved complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it",
     ),
     Path("llms.txt"): (
         "Baram (`바람`) means wind in Korean",
         "first successful license check after Google sign-in",
         "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
+        "confirmed Creem paid access without a complimentary access code",
+        "Every complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it",
+        "brief adapter-disconnect grace period",
+        "current authorized control session and entitlement remain valid",
+        "safe return remains pending, the affected control remains fenced, and the supported restore path is retried",
+        "physical outcome requires separate installation and device-state readback evidence",
     ),
 }
 ROADMAP_ONLY_TERMS = {
