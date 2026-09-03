@@ -95,6 +95,26 @@ EXPECTED_FACT_STATUSES = {
     "intel-mac": "unsupported",
     "imac": "unsupported",
 }
+PUBLIC_FACT_SUMMARY_REQUIREMENTS = {
+    "low-battery-sleep-return": (
+        "brief adapter-disconnect grace period",
+        "only after the recovery boundary",
+        "current authorized control session and entitlement remain valid",
+    ),
+    "license-access-source-boundary": (
+        "confirmed Creem paid access without a complimentary code",
+        "identifies its plan and access period",
+        "can be redeemed once",
+        "binds the grant to the approved account that redeems it",
+    ),
+    "control-interlocks": (
+        "not complete until supported state readback confirms it",
+        "safe return remains pending",
+        "affected control remains fenced",
+        "supported restore path is retried",
+        "requires separate installation and device-state readback evidence",
+    ),
+}
 CANONICAL_BASELINE_PHRASES = {
     Path("README.md"): (
         "Baram` (`바람`) means wind in Korean",
@@ -276,6 +296,11 @@ def validate_public_facts(errors: list[str]) -> dict[str, dict[str, object]]:
             fail(errors, f"{prefix} source_url must use the official HTTPS origin")
 
     validate_fact_status_contract(errors, facts_by_id)
+    for fact_id, phrases in PUBLIC_FACT_SUMMARY_REQUIREMENTS.items():
+        summary = str(facts_by_id.get(fact_id, {}).get("summary", ""))
+        for phrase in phrases:
+            if phrase not in summary:
+                fail(errors, f"public fact {fact_id} summary must state: {phrase}")
     return facts_by_id
 
 

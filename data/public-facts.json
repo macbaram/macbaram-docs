@@ -42,7 +42,7 @@
     {
       "id": "low-battery-sleep-return",
       "status": "available",
-      "summary": "At the user-selected low-battery threshold, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur.",
+      "summary": "After a brief adapter-disconnect grace period, MacBaram can stop Stay Awake and Virtual Clamshell at the user-selected low-battery threshold, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep to occur. Saved controls are considered for reapplication only after the recovery boundary and while the current authorized control session and entitlement remain valid.",
       "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },
@@ -86,7 +86,7 @@
     {
       "id": "license-access-source-boundary",
       "status": "available",
-      "summary": "Normal purchase access, Supporter complimentary access, and Creator Access are distinct; a Supporter recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
+      "summary": "Normal purchase originates from confirmed Creem paid access without a complimentary code. Each complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it. Supporter complimentary access, Creator Access, and a Supporter recommendation connection remain distinct; the recommendation connection identifies a later eligible paid purchase only and is not product access, a discount, or an access-code redemption.",
       "source_evidence": "verified",
       "verified_on": "2026-09-03",
       "source_url": "https://www.macbaram.com/"
@@ -143,7 +143,7 @@
     {
       "id": "control-interlocks",
       "status": "available",
-      "summary": "MacBaram keeps a control unavailable or returns supported behavior toward macOS defaults when required public-safe hardware, temperature, power, or session conditions are not satisfied.",
+      "summary": "MacBaram keeps a control unavailable or returns supported behavior toward macOS defaults when required public-safe hardware, temperature, power, or session conditions are not satisfied. A restore request is not complete until supported state readback confirms it; until then, safe return remains pending, the affected control remains fenced, and the supported restore path is retried. Repository evidence does not establish the installed release's physical outcome, which requires separate installation and device-state readback evidence.",
       "verified_on": "2026-09-02",
       "source_url": "https://www.macbaram.com/"
     },

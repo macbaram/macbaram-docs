@@ -173,6 +173,42 @@ class StatusBoundaryTests(unittest.TestCase):
             "current authorized control session and entitlement remain valid",
         )
 
+    def assert_missing_public_fact_summary_phrase(self, fact_id: str, phrase: str) -> None:
+        original_root = VALIDATOR.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            mutated_root = Path(directory) / "public-docs"
+            shutil.copytree(PUBLIC_ROOT, mutated_root)
+            facts_path = mutated_root / "data/public-facts.json"
+            facts_path.write_text(
+                facts_path.read_text(encoding="utf-8").replace(phrase, "removed contract"),
+                encoding="utf-8",
+            )
+            try:
+                VALIDATOR.ROOT = mutated_root
+                errors: list[str] = []
+                VALIDATOR.validate_public_facts(errors)
+            finally:
+                VALIDATOR.ROOT = original_root
+        self.assertIn(f"public fact {fact_id} summary must state: {phrase}", errors)
+
+    def test_public_facts_preserve_safe_return_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "control-interlocks",
+            "safe return remains pending",
+        )
+
+    def test_public_facts_preserve_access_source_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "license-access-source-boundary",
+            "confirmed Creem paid access without a complimentary code",
+        )
+
+    def test_public_facts_preserve_low_battery_reapply_summary(self) -> None:
+        self.assert_missing_public_fact_summary_phrase(
+            "low-battery-sleep-return",
+            "current authorized control session and entitlement remain valid",
+        )
+
     def test_non_current_fact_summary_cannot_claim_current_availability(self) -> None:
         facts = self.valid_facts()
         facts["enterprise-single"]["summary"] = "Enterprise Single is currently available."
