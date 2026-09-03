@@ -67,6 +67,23 @@ FORBIDDEN_PATTERNS = {
         r"비판을 제한하지)",
         re.I,
     ),
+    "reusable complimentary code claim": re.compile(
+        r"\b(?:same|one|a)?\s*(?:complimentary\s+)?code\b.{0,100}"
+        r"(?:\b(?:multiple|any|different|another)\s+accounts?\b|"
+        r"\b(?:reused|redeemed\s+(?:again|more than once)|used\s+(?:again|repeatedly|more than once))\b)",
+        re.I,
+    ),
+    "unauthorized reapplication claim": re.compile(
+        r"\breappl(?:y|ied|ication)\b.{0,100}(?:"
+        r"\b(?:without|regardless of)\b.{0,50}\b(?:authorization|entitlement)\b|"
+        r"\beven\s+(?:if|when)\b.{0,30}\b(?:authorization|entitlement)\b.{0,20}\b(?:invalid|expired|missing)\b)",
+        re.I,
+    ),
+    "unverified restore success claim": re.compile(
+        r"\b(?:return|restore)\b.{0,80}\b(?:complete|successful|success)\b.{0,60}"
+        r"\bwithout\b.{0,40}\b(?:state )?(?:verification|readback)\b",
+        re.I,
+    ),
 }
 EXPECTED_FACT_STATUSES = {
     "apple-silicon-requirement": "available",
@@ -98,22 +115,41 @@ EXPECTED_FACT_STATUSES = {
 PUBLIC_FACT_SUMMARY_REQUIREMENTS = {
     "low-battery-sleep-return": (
         "brief adapter-disconnect grace period",
-        "only after the recovery boundary",
-        "current authorized control session and entitlement remain valid",
+        "after external power returns or the battery recovers",
+        "only when the current authorization still allows them",
     ),
     "license-access-source-boundary": (
-        "confirmed Creem paid access without a complimentary code",
-        "identifies its plan and access period",
-        "can be redeemed once",
-        "binds the grant to the approved account that redeems it",
+        "Creem-confirmed paid access without a complimentary code",
+        "creates one account-bound access grant",
+        "selected plan and period",
     ),
     "control-interlocks": (
-        "not complete until supported state readback confirms it",
-        "safe return remains pending",
-        "affected control remains fenced",
-        "supported restore path is retried",
+        "authorization-related return is complete only after the supported state is verified",
+        "affected optional controls remain unavailable while that return is incomplete",
+        "pending entitlement-restriction return can make another supported attempt",
         "requires separate installation and device-state readback evidence",
     ),
+}
+PUBLIC_FACT_STRUCTURED_REQUIREMENTS = {
+    "low-battery-sleep-return": {
+        "reapply_conditions": ["external_power_restored", "battery_recovered"],
+        "authorization_required_for_reapply": True,
+        "work_completion_guaranteed": False,
+    },
+    "license-access-source-boundary": {
+        "paid_origin": "Creem",
+        "paid_code_required": False,
+        "complimentary_grant_count_per_code": 1,
+        "complimentary_account_bound": True,
+        "grant_plan_and_period_explicit": True,
+        "supporter_affiliate_is_entitlement": False,
+    },
+    "control-interlocks": {
+        "authorization_return_requires_state_verification": True,
+        "affected_controls_available_while_return_pending": False,
+        "entitlement_restriction_return_retryable": True,
+        "physical_release_evidence_required": True,
+    },
 }
 CANONICAL_BASELINE_PHRASES = {
     Path("README.md"): (
@@ -124,33 +160,38 @@ CANONICAL_BASELINE_PHRASES = {
         "first successful license check after Google sign-in",
         "The available feature set follows the effective plan in the validated signed license",
         "A Supporter recommendation connection is not product access, a discount, or code redemption",
-        "confirmed Creem paid access",
-        "Every complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the account that redeems it",
+        "Creem-confirmed paid access",
+        "A complimentary code creates one account-bound access grant for its selected plan and period",
     ),
     Path("docs/battery-aware-sleep.md"): (
         "a brief grace period lets a momentary adapter transition settle",
-        "current authorized control session and entitlement remain valid",
+        "When external power returns or the battery recovers above the separate recovery boundary",
+        "only if the current authorization still allows it",
     ),
     Path("docs/control-session-lifecycle.md"): (
-        "safe return remains pending, the affected control remains fenced, and the supported restore path is retried",
+        "a pending entitlement-restriction return can make another supported attempt",
+        "Affected optional controls remain unavailable while that return is incomplete",
         "physical release outcome requires separate installation and device-state readback evidence",
     ),
     Path("docs/roadmap.md"): (
         "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
         "complimentary access for the Supporter's own account remains a separate benefit",
-        "The code can be redeemed once and binds that plan and access period to the approved account that redeems it",
-        "Any approved complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it",
+        "The code creates one account-bound access grant for that plan and period",
+        "An approved complimentary code creates one account-bound access grant for its selected plan and period",
+        "A roadmap name, preview, or preparatory entry does not make Enterprise Single a current product or feature",
     ),
     Path("llms.txt"): (
         "Baram (`바람`) means wind in Korean",
         "first successful license check after Google sign-in",
         "A Supporter recommendation connection is not product access, a discount, or access-code redemption",
-        "confirmed Creem paid access without a complimentary access code",
-        "Every complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the approved account that redeems it",
+        "Creem-confirmed paid access without a complimentary access code",
+        "A complimentary code creates one account-bound access grant for its selected plan and period",
         "brief adapter-disconnect grace period",
-        "current authorized control session and entitlement remain valid",
-        "safe return remains pending, the affected control remains fenced, and the supported restore path is retried",
+        "after external power returns or the battery recovers",
+        "only when the current authorization still allows them",
+        "pending entitlement-restriction return can make another supported attempt",
         "physical outcome requires separate installation and device-state readback evidence",
+        "A roadmap name, preview, or preparatory entry does not make it current",
     ),
 }
 ROADMAP_ONLY_TERMS = {
@@ -208,13 +249,33 @@ LIVE_SOURCE_REQUIREMENTS = {
     ),
     "license-access-source-boundary": (
         re.compile(
-            r"(?=.*\bnormal purchase\b.*\bwithout a complimentary access code\b)"
+            r"(?=.*\bnormal purchase\b.*\bCreem\b.*\bwithout a complimentary access code\b)"
+            r"(?=.*\bcomplimentary code\b.*\bone account-bound access grant\b.*\bplan\b.*\bperiod\b)"
             r"(?=.*\bSupporter complimentary access\b.*\bown account\b)"
             r"(?=.*\bCreator Access\b.*\b365-day\b)"
             r"(?=.*\bSupporter recommendation connection\b.*\bnot product access\b.*\bdiscount\b.*\bcode redemption\b)",
             re.I,
         ),
-        "the separate paid, Supporter, Creator, and recommendation-attribution access boundaries",
+        "the Creem-paid, one-grant account binding, Supporter, Creator, and recommendation-attribution boundaries",
+    ),
+    "low-battery-sleep-return": (
+        re.compile(
+            r"(?=.*\bbrief\b.*\bgrace period\b)"
+            r"(?=.*\bexternal power returns\b.*\bbattery recovers\b)"
+            r"(?=.*\bcurrent authorization\b.*\ballows\b)",
+            re.I,
+        ),
+        "the adapter grace, external-power or battery recovery paths, and current-authorization boundary",
+    ),
+    "control-interlocks": (
+        re.compile(
+            r"(?=.*\bauthorization-related return\b.*\bcomplete only after\b.*\bverified\b)"
+            r"(?=.*\boptional controls remain unavailable\b.*\bincomplete\b)"
+            r"(?=.*\bentitlement-restriction return\b.*\banother supported attempt\b)"
+            r"(?=.*\bphysical\b.*\bdevice-state readback evidence\b)",
+            re.I,
+        ),
+        "the public-safe authorization return, retry scope, and physical-evidence boundary",
     ),
 }
 PROMOTION_PATTERNS = (
@@ -301,6 +362,11 @@ def validate_public_facts(errors: list[str]) -> dict[str, dict[str, object]]:
         for phrase in phrases:
             if phrase not in summary:
                 fail(errors, f"public fact {fact_id} summary must state: {phrase}")
+    for fact_id, fields in PUBLIC_FACT_STRUCTURED_REQUIREMENTS.items():
+        fact = facts_by_id.get(fact_id, {})
+        for field, expected in fields.items():
+            if fact.get(field) != expected:
+                fail(errors, f"public fact {fact_id} {field} must be {expected!r}")
     return facts_by_id
 
 
@@ -333,6 +399,9 @@ def validate_live_source_evidence(
     facts_by_id: dict[str, dict[str, object]],
     fetch=fetch_official_source,
 ) -> None:
+    missing_live_guards = set(PUBLIC_FACT_SUMMARY_REQUIREMENTS) - set(LIVE_SOURCE_REQUIREMENTS)
+    for fact_id in sorted(missing_live_guards):
+        fail(errors, f"public fact {fact_id} has no live source requirement")
     for fact_id, (pattern, description) in LIVE_SOURCE_REQUIREMENTS.items():
         fact = facts_by_id.get(fact_id)
         if fact is None:

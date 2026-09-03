@@ -38,7 +38,7 @@ For an eligible first-time user, it starts with MacBaram's first successful lice
 
 ## How do normal purchase, Supporter access, and Creator Access differ?
 
-A normal purchase originates from confirmed Creem paid access and does not require a complimentary access code. Every complimentary code identifies its plan and access period, can be redeemed once, and binds the grant to the account that redeems it. Supporter complimentary access is for an approved Supporter's own account. Creator Access is the separate 365-day opportunity for the selected plan granted to an approved Creator Sponsorship applicant. A Supporter recommendation connection is not product access, a discount, or code redemption; it only distinguishes a later eligible normal paid purchase for attribution. These purposes are not interchangeable.
+A normal purchase uses Creem-confirmed paid access and does not require a complimentary access code. A complimentary code creates one account-bound access grant for its selected plan and period. Supporter complimentary access is for an approved Supporter's own account. Creator Access is the separate 365-day opportunity for the selected plan granted to an approved Creator Sponsorship applicant. A Supporter recommendation connection is not product access, a discount, or code redemption; it only distinguishes a later eligible normal paid purchase for attribution. These purposes are not interchangeable.
 
 ## Where are Creator Sponsorship and Supporters described?
 

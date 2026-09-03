@@ -29,8 +29,8 @@ MacBaram currently keeps system sleep and display sleep as separate user choices
 Supported return paths include:
 
 - **User stop or disable:** MacBaram releases its temporary sleep and display controls and ends the related virtual-display session where applicable.
-- **Low battery after external power is unavailable:** at the battery cutoff selected by the user, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, display, and sleep behavior toward macOS defaults, and allow normal sleep.
-- **Lost trusted control or invalid authorization:** MacBaram returns the affected supported controls toward macOS defaults. A restore request is not treated as success unless the supported state can be read back. Until that readback confirms the intended state, safe return remains pending, the affected control remains fenced, and the supported restore path is retried.
+- **Low battery after external power is unavailable:** at the battery cutoff selected by the user, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep.
+- **Lost trusted control or invalid authorization:** MacBaram returns the affected supported controls toward macOS defaults. It does not present an authorization-related return as complete until the supported state is verified. Affected optional controls remain unavailable while that return is incomplete, and a pending entitlement-restriction return can make another supported attempt.
 
 These paths do not erase every saved preference, and they do not mean that every control exists on every Mac. Hardware capability, current power state, and authorization still decide what can be applied.
 
