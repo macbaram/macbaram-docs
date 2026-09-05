@@ -11,7 +11,7 @@ Machine-readable facts: data/public-facts.json
 
 ## Compatibility
 
-- Apple silicon M1 or later is required.
+- An Apple M-series chip (M1 or later) is required. MacBook Neo with A18 Pro is not currently supported.
 - macOS 13 or later is required.
 - Intel Macs are not supported.
 - Controls appear only when the current Mac reports the required verified capability. Fanless Macs do not gain fan controls, and desktop Macs do not gain portable-battery controls.
@@ -20,7 +20,7 @@ Machine-readable facts: data/public-facts.json
 
 - Air, Desktop, and Pro are the current individual plan families. Current prices, purchase availability, trial terms, and the exact plan matrix are canonical only on the official website.
 - Current controls include supported fan curves, charging limits, Power-Only, Safety Drain, Heat Protection, sleep prevention, separate physical-display behavior, Virtual Clamshell, low-battery return toward normal macOS sleep, and a unified dashboard.
-- Virtual Clamshell is a current core feature on supported Apple silicon MacBooks. The built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor. It does not bypass login, lock, application permission, or remote-tool authorization.
+- Virtual Clamshell is a current core feature on supported M-series MacBooks. The built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor. It does not bypass login, lock, application permission, or remote-tool authorization.
 - Heat Protection can coordinate a supported charging pause and an available fan response from the same battery-temperature condition, then restore the active fan policy after cooling.
 - After a brief adapter-disconnect grace period, MacBaram can stop Stay Awake and Virtual Clamshell at the user-selected low-battery threshold, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep to occur. Saved choices can be considered again after external power returns or the battery recovers, but only when the current authorization still allows them. This does not guarantee that a workload has saved or completed its work.
 - Fan curves use measured temperature feedback. Public-safe hardware, temperature, power, and session conditions can keep a control unavailable or return supported behavior toward macOS defaults.

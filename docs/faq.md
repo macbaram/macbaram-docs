@@ -10,7 +10,11 @@ Only from [https://www.macbaram.com/download](https://www.macbaram.com/download)
 
 ## Does MacBaram support Intel Macs?
 
-No. Apple silicon and macOS 13 or later are required.
+No. An Apple M-series chip (M1 or later) and macOS 13 or later are required.
+
+## Does MacBaram support MacBook Neo?
+
+Not currently. MacBook Neo uses A18 Pro, and MacBaram does not declare its battery controls or Virtual Clamshell supported until model-specific runtime verification is complete.
 
 ## Does MacBaram support iMac?
 
