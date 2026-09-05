@@ -32,7 +32,7 @@ The display and system-sleep controls are separate. A user can allow the physica
 
 ## Virtual Clamshell
 
-On supported Apple silicon MacBooks, Virtual Clamshell can maintain a software virtual display for lid-closed work without requiring a dummy display adapter. This lets the closed built-in panel turn off while an already authorized screen session remains available. When a real external monitor is connected, MacBaram releases the virtual-display path and uses the normal external-display workflow.
+On supported M-series MacBooks, Virtual Clamshell can maintain a software virtual display for lid-closed work without requiring a dummy display adapter. This lets the closed built-in panel turn off while an already authorized screen session remains available. When a real external monitor is connected, MacBaram releases the virtual-display path and uses the normal external-display workflow.
 
 Virtual Clamshell does not bypass a lock, login, application permission, or remote-tool authorization. An existing remote-control or screen-control tool must keep its own connection and permission, and the workload must still be checked independently.
 

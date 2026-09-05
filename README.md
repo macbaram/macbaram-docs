@@ -37,7 +37,7 @@ MacBaram manages these related conditions without guaranteeing performance or ha
 - **Safety Drain** — If the battery is above its selected target, use the Mac's normal system load to return toward that target before resuming the selected charging policy; MacBaram does not create an artificial discharge workload.
 - **Heat Protection** — Use one supported battery-temperature condition to pause charging and coordinate an available fan response, then restore the active fan policy after cooling.
 - **Sleep prevention for long work** — Keep supported work from being interrupted by normal system sleep when the feature is active.
-- **Display and Virtual Clamshell controls** — Let the physical display turn off while supported work continues, including a virtual screen session for lid-closed work on supported Apple silicon MacBooks without a real external monitor.
+- **Display and Virtual Clamshell controls** — Let the physical display turn off while supported work continues, including a virtual screen session for lid-closed work on supported M-series MacBooks without a real external monitor.
 - **Low-battery return to normal sleep** — At the battery level selected by the user, MacBaram can stop Stay Awake and Virtual Clamshell, return supported fan, charging, and sleep behavior toward macOS defaults, and allow normal sleep to occur.
 - **Unified dashboard** — Review fan, battery, power, and sleep state together instead of checking separate utilities.
 - **Creator Sponsorship applications** — Apply with public activity, Mac and chip, selected plan, and intended use. Approved creators receive 365 days; no review, rating, purchase, or feedback is required.
@@ -50,7 +50,7 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 
 ## Supported Macs
 
-MacBaram requires Apple silicon and macOS 13 or later. The current support scope covers Mac mini and Mac Studio, plus MacBook Air and MacBook Pro models whose required capabilities are verified by the app.
+MacBaram requires an Apple M-series chip (M1 or later) and macOS 13 or later. The current support scope covers Mac mini and Mac Studio, plus MacBook Air and MacBook Pro models whose required capabilities are verified by the app. MacBook Neo with A18 Pro is not currently supported.
 
 Intel Macs are not supported. iMac support is not currently declared; MacBaram fails closed when the required iMac capabilities have not been verified. See [Supported Macs](docs/supported-macs.md) for the complete boundary.
 
