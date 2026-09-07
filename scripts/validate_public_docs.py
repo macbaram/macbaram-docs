@@ -211,8 +211,13 @@ ROADMAP_REFERENCE_FILES = {
 }
 LIVE_SOURCE_REQUIREMENTS = {
     "apple-silicon-requirement": (
-        re.compile(r"\bmacOS\s*13(?:\+|\s+or\s+(?:later|newer))\b", re.I),
-        "macOS 13 or later",
+        re.compile(
+            r"(?=.*\bApple\s+M-series\b.*\bM1\s+or\s+(?:later|newer)\b)"
+            r"(?=.*\bmacOS\s*13(?:\+|\s+or\s+(?:later|newer))\b)"
+            r"(?=.*\bMacBook\s+Neo\b.*\bnot\s+(?:currently\s+)?supported\b)",
+            re.I,
+        ),
+        "Apple M-series M1 or later, macOS 13 or later, and MacBook Neo as not currently supported",
     ),
     "creator-sponsorship-application": (
         re.compile(

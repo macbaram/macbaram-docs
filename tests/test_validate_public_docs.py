@@ -411,12 +411,15 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             set(),
         )
 
-    def test_visible_minimum_macos_copy_passes(self) -> None:
+    def test_visible_compatibility_boundary_passes(self) -> None:
         errors: list[str] = []
         VALIDATOR.validate_live_source_evidence(
             errors,
             self.facts(),
-            fetch=lambda _url: "<main><p>Requires Apple silicon M1 or later and macOS 13 or later.</p></main>",
+            fetch=lambda _url: (
+                "<main><p>Requires Apple M-series M1 or later and macOS 13 or later.</p>"
+                "<p>MacBook Neo is not currently supported.</p></main>"
+            ),
         )
         self.assertEqual(errors, [])
 
@@ -425,9 +428,23 @@ class LiveSourceEvidenceTests(unittest.TestCase):
         VALIDATOR.validate_live_source_evidence(
             errors,
             self.facts(),
-            fetch=lambda _url: "<main><p>Requires Apple silicon M1 or later.</p></main>",
+            fetch=lambda _url: (
+                "<main><p>Requires Apple M-series M1 or later.</p>"
+                "<p>MacBook Neo is not currently supported.</p></main>"
+            ),
         )
-        self.assertTrue(any("source body must state macOS 13 or later" in error for error in errors))
+        self.assertTrue(any("source body must state Apple M-series" in error for error in errors))
+
+    def test_apple_silicon_wording_without_neo_boundary_fails(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_live_source_evidence(
+            errors,
+            self.facts(),
+            fetch=lambda _url: (
+                "<main><p>Requires Apple silicon M1 or later and macOS 13 or later.</p></main>"
+            ),
+        )
+        self.assertTrue(any("source body must state Apple M-series" in error for error in errors))
 
     def test_structured_data_alone_does_not_satisfy_visible_copy(self) -> None:
         errors: list[str] = []
@@ -436,7 +453,7 @@ class LiveSourceEvidenceTests(unittest.TestCase):
             self.facts(),
             fetch=lambda _url: '<script type="application/ld+json">{"operatingSystem":"macOS 13+"}</script><main><p>Apple silicon Mac.</p></main>',
         )
-        self.assertTrue(any("source body must state macOS 13 or later" in error for error in errors))
+        self.assertTrue(any("source body must state Apple M-series" in error for error in errors))
 
     def test_visible_creator_application_contract_passes(self) -> None:
         errors: list[str] = []

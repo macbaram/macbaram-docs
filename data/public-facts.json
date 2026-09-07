@@ -14,8 +14,8 @@
     {
       "id": "apple-silicon-requirement",
       "status": "available",
-      "summary": "MacBaram requires Apple silicon and macOS 13 or later.",
-      "verified_on": "2026-09-02",
+      "summary": "MacBaram requires an Apple M-series chip (M1 or later) and macOS 13 or later. MacBook Neo with A18 Pro is not currently supported.",
+      "verified_on": "2026-09-05",
       "source_url": "https://www.macbaram.com/guides/macbaram-mac-control-guide/"
     },
     {
@@ -63,9 +63,9 @@
     {
       "id": "virtual-clamshell",
       "status": "available",
-      "summary": "Virtual Clamshell is available on supported Apple silicon MacBooks: the built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor.",
-      "verified_on": "2026-09-02",
-      "source_url": "https://www.macbaram.com/guides/keep-mac-awake/"
+      "summary": "Virtual Clamshell is available on supported M-series MacBooks: the built-in physical display can turn off while a software virtual screen maintains an already authorized lid-closed session without a real external monitor.",
+      "verified_on": "2026-09-05",
+      "source_url": "https://www.macbaram.com/guides/macbaram-mac-control-guide/#mb-evid-vclam-001"
     },
     {
       "id": "individual-plan-lineup",

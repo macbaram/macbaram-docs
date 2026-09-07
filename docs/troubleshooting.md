@@ -2,7 +2,7 @@
 
 ## A control is missing or unavailable
 
-1. Confirm the Mac uses Apple silicon and macOS 13 or later.
+1. Confirm the Mac uses an Apple M-series chip (M1 or later) and macOS 13 or later.
 2. Check [Supported Macs](supported-macs.md).
 3. Remember that fanless Macs have no fan control and desktop Macs have no portable battery control.
 4. If MacBaram cannot verify a required capability, the control intentionally remains unavailable.
