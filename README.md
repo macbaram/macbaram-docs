@@ -52,7 +52,7 @@ Current Air, Desktop, and Pro plans do not automatically detect Ollama or switch
 
 MacBaram requires Apple silicon and macOS 13 or later. The current support scope covers Mac mini and Mac Studio, plus MacBook Air and MacBook Pro models whose required capabilities are verified by the app.
 
-Intel Macs are not supported. iMac support is not currently declared; MacBaram fails closed when the required iMac capabilities have not been verified. See [Supported Macs](docs/supported-macs.md) for the complete boundary.
+Intel Macs are not supported. MacBook Neo with A18 Pro is not currently supported while battery control and Virtual Clamshell await actual-device verification. iMac support is not currently declared; MacBaram fails closed when the required iMac capabilities have not been verified. See [Supported Macs](docs/supported-macs.md) for the complete boundary.
 
 ## Safety boundary
 
